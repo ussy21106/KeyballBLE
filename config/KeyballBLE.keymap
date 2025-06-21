@@ -92,7 +92,7 @@
             bindings = <
 &kp EXCLAMATION  &kp DOUBLE_QUOTES  &kp HASH         &kp DOLLAR       &kp PERCENT                          &kp AMPERSAND    &kp SQT          &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp MINUS
 &kp KP_NUMBER_1  &kp KP_NUMBER_2    &kp KP_NUMBER_3  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &trans      &none   &kp KP_NUMBER_6  &kp KP_NUMBER_7  &kp KP_NUMBER_8       &kp KP_NUMBER_9        &kp KP_NUMBER_0
-&kp LG(Z)        &kp LG(X)          &kp LG(C)        &kp LG(V)        &kp LG(Y)        &trans      &none   &none            &kp KP_EQUAL     &kp PLUS              &kp ASTRK              &none
+&kp LG(Z)        &kp LG(X)          &kp LG(C)        &kp LG(V)        &kp LG(Y)        &trans      &none   &none            &kp KP_EQUAL     &kp PLUS              &kp ASTRK              &kp UNDERSCORE
 &kp LG(A)        &trans             &trans           &trans           &trans           &trans      &trans  &trans                                                                         &none
             >;
         };
