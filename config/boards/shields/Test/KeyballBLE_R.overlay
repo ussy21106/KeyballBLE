@@ -41,7 +41,14 @@
     };
 };
 
-&xiao_serial { status = "disabled"; };
+ &xiao_serial { status = "okay"; };
+
+
+/ {
+    chosen {
+        zmk,studio-rpc-uart = &xiao_serial;
+    };
+};
 
 &spi0 {
     status = "okay";
@@ -61,5 +68,3 @@
         scroll-layers = <5>;
     };
 };
-
-

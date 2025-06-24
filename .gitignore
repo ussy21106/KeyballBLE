@@ -1,0 +1,5 @@
+
+# Local build files
+config/boards/shields/KeyballBLE_*
+config/boards/shields/Kconfig.*
+config/boards/shields/KeyballBLE.*
