@@ -28,6 +28,7 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
+#include <dt-bindings/zmk/outputs.h>    //USB/BT切替設定のため
 
 //#define MOUSE 4
 //#define SCROLL 5
@@ -47,12 +48,12 @@
             key-positions = <20 21>;
         };
 
-        To_Layer1 {
+        To_LayerARROW {
             bindings = <&mo LAYER_ARROW>;  // ARROWレイヤーに移動
             key-positions = <11 12>;
         };
 
-        To_Layer6 {
+        To_LayerSETTING {
             bindings = <&mo LAYER_SETTINGS>;  // 設定レイヤーに移動
             key-positions = <38 37>;
         };
@@ -128,7 +129,7 @@
         to_layer_0: to_layer_0 {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
-            bindings = <&to 0 &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+            bindings = <&to &to_default_layer &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
             label = "TO_LAYER_0";
         };
 
@@ -156,7 +157,7 @@
         lt_to_layer_0: lt_to_layer_0 {
             compatible = "zmk,behavior-hold-tap";
             label = "LAYER_TAP_TO_0";
-            bindings = <&mo>, <&to_default_layer>;
+            bindings = <&mo>, <&to_layer_0>;
 
             #binding-cells = <2>;
             tapping-term-ms = <200>;
@@ -235,7 +236,7 @@
 &kp Q             &kp W         &kp E         &kp R                   &kp T                                                                      &kp Y                   &kp U               &kp I      &kp O    &kp P
 &kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt_to_layer_0 LAYER_FUNCTION J  &kp K      &kp L    &lt_to_layer_0 LAYER_MOUSE MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                   &kp B                   &mkp LCLK                   &kp AT_SIGN            &kp N                   &kp M               &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RIGHT_CTRL TAB    &lt_to_layer_0 LAYER_ARROW ENTER  &kp LC(LS(S))                                       &kp LC(LS(S))
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RCTRL TAB    &lt_to_layer_0 LAYER_ARROW ENTER                                         &kp A
             >;
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
@@ -245,7 +246,7 @@
 &kp Q             &kp W         &kp E         &kp R                   &kp T                                                                      &kp Y                   &kp U               &kp I      &kp O    &kp P
 &kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt_to_layer_0 LAYER_FUNCTION J  &kp K      &kp L    &lt_to_layer_0 LAYER_MOUSE MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                   &kp B                   &mkp LCLK                   &kp AT_SIGN            &kp N                   &kp M               &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RIGHT_CTRL TAB    &lt_to_layer_0 LAYER_ARROW ENTER  &kp LC(LS(S))                                       &kp LC(LS(S))
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RCTRL TAB    &lt_to_layer_0 LAYER_ARROW ENTER                                         &kp A
             >;
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
@@ -282,9 +283,9 @@
         LAYER_SYMBOL {
             bindings = <
 &kp GRAVE        &kp TILDE         &kp CARET        &kp AMPERSAND    &kp PIPE        &kp BACKSLASH  &kp SLASH      &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &kp MINUS
-&kp AT_SIGN      &kp HASH          &kp DOLLAR       &kp PERCENT      &kp CARET       &none          &none          &kp LEFT_BRACE    &kp RIGHT_BRACE    &kp UNDERSCORE  &kp EQUAL
-&kp EXCLAMATION  &kp QUESTION      &kp COLON        &kp SEMICOLON    &kp QUOTE       &none          &none          &kp LESS          &kp GREATER        &kp QUOTE       &kp BACKSLASH
-&none            &none             &none            &none            &none           &none          &none          &none             &none              &none           &none
+&kp AT_SIGN      &kp HASH          &kp DOLLAR       &kp PERCENT      &kp CARET       &none          &none          &kp LEFT_BRACE    &kp RIGHT_BRACE    &kp UNDERSCORE  &kp EQUAL             &none 
+&kp EXCLAMATION  &kp QUESTION      &kp COLON        &kp SEMICOLON    &kp SINGLE_QUOTE       &none          &none          &kp LESS_THAN          &kp GREATER_THAN        &kp SINGLE_QUOTE       &kp BACKSLASH         &none 
+&none            &none             &none            &none            &none           &none          &none          &none                                                               &none
             >;
         };
 
@@ -316,7 +317,7 @@
 // システム操作
 &trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp N4     &trans      &bootloader         &kp KP_NUMLOCK      &trans            &trans            &trans          &bt BT_CLR
 // クリア系
-&trans  &trans        &trans        &trans        &trans     &trans      &trans              &trans                                                                        &bt BT_CLR_ALL
+&trans  &trans        &trans        &trans        &trans     &trans      &out OUT_USB        &out OUT_BLE                                                            &bt BT_CLR_ALL
             >;
         };
     };

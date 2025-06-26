@@ -41,8 +41,7 @@
     };
 };
 
-// &xiao_serial { status = "okay"; };
- &xiao_serial { status = "disabled"; };
+ &xiao_serial { status = "okay"; };
 
 
 / {
@@ -65,7 +64,7 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        automouse-layer = <9>;
-        scroll-layers = <10>;
+        automouse-layer = <4>;
+        scroll-layers = <5>;
     };
 };
