@@ -3,3 +3,9 @@
 config/boards/shields/KeyballBLE_*
 config/boards/shields/Kconfig.*
 config/boards/shields/KeyballBLE.*
+
+# Keymap backups
+config/KeyballBLE.keymap.*.bak
+
+# Backup files
+*.overlay.bak_*

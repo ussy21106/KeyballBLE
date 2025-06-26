@@ -30,12 +30,18 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/outputs.h>    //USB/BT切替設定のため
 #include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
 
 //#define MOUSE 4
 //#define SCROLL 5
 //#define NUM 6
+
+&trackball_listener {
+    input-processors = <&zip_temp_layer LAYER_MOUSE 10000>;
+};
+
 
 &mt {
     flavor = "balanced";
