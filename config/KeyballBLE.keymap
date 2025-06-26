@@ -2,7 +2,7 @@
 
 // レイヤー定義
 // デフォルトレイヤー (接続先ごと)
-#define DEFAULT_LAYER_MAC_DESKTOP 0  // デスクトップMac用
+#define DEFAULT_LAYER 0  // デスクトップMac用
 #define DEFAULT_LAYER_MAC_NOTE 1     // ノートMac用
 #define DEFAULT_LAYER_IPAD 2         // iPad用
 #define DEFAULT_LAYER_WIN_DESKTOP 3  // デスクトップWin用
@@ -18,7 +18,7 @@
 #define LAYER_SETTINGS 11  // 設定レイヤー
 
 // 接続先ごとのデフォルトレイヤーを定義
-#define BT_PROFILE_0 DEFAULT_LAYER_MAC_DESKTOP  // 接続先1: デスクトップMac
+#define BT_PROFILE_0 DEFAULT_LAYER  // 接続先1: デスクトップMac
 #define BT_PROFILE_1 DEFAULT_LAYER_MAC_NOTE     // 接続先2: ノートMac
 #define BT_PROFILE_2 DEFAULT_LAYER_IPAD         // 接続先3: iPad
 #define BT_PROFILE_3 DEFAULT_LAYER_WIN_DESKTOP  // 接続先4: デスクトップWin
@@ -70,7 +70,7 @@
                 <&tog_off DEFAULT_LAYER_WIN_DESKTOP>,
                 <&tog_off DEFAULT_LAYER_WIN_COMPANY>,
                 <&bt BT_SEL 0>,
-                <&tog_on DEFAULT_LAYER_MAC_DESKTOP>;
+                <&tog_on DEFAULT_LAYER>;
             label = "SWITCH_TO_MAC_DESKTOP";
         };
 
@@ -78,7 +78,7 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings =
-                <&tog_off DEFAULT_LAYER_MAC_DESKTOP>,
+                <&tog_off DEFAULT_LAYER>,
                 <&tog_off DEFAULT_LAYER_IPAD>,
                 <&tog_off DEFAULT_LAYER_WIN_DESKTOP>,
                 <&tog_off DEFAULT_LAYER_WIN_COMPANY>,
@@ -91,7 +91,7 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings =
-                <&tog_off DEFAULT_LAYER_MAC_DESKTOP>,
+                <&tog_off DEFAULT_LAYER>,
                 <&tog_off DEFAULT_LAYER_MAC_NOTE>,
                 <&tog_off DEFAULT_LAYER_WIN_DESKTOP>,
                 <&tog_off DEFAULT_LAYER_WIN_COMPANY>,
@@ -104,7 +104,7 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings =
-                <&tog_off DEFAULT_LAYER_MAC_DESKTOP>,
+                <&tog_off DEFAULT_LAYER>,
                 <&tog_off DEFAULT_LAYER_MAC_NOTE>,
                 <&tog_off DEFAULT_LAYER_IPAD>,
                 <&tog_off DEFAULT_LAYER_WIN_COMPANY>,
@@ -117,7 +117,7 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings =
-                <&tog_off DEFAULT_LAYER_MAC_DESKTOP>,
+                <&tog_off DEFAULT_LAYER>,
                 <&tog_off DEFAULT_LAYER_MAC_NOTE>,
                 <&tog_off DEFAULT_LAYER_IPAD>,
                 <&tog_off DEFAULT_LAYER_WIN_DESKTOP>,
@@ -126,11 +126,23 @@
             label = "SWITCH_TO_WIN_COMPANY";
         };
 
-        to_layer_0: to_layer_0 {
+        to_default_layer: to_default_layer {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = 
+                <&to DEFAULT_LAYER>,
+                <&to DEFAULT_LAYER_MAC_NOTE>,
+                <&to DEFAULT_LAYER_IPAD>,
+                <&to DEFAULT_LAYER_WIN_DESKTOP>,
+                <&to DEFAULT_LAYER_WIN_COMPANY>;
+            label = "TO_DEFAULT_LAYER";
+        };
+        
+        to_layer_df: to_layer_df {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
             bindings = <&to &to_default_layer &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
-            label = "TO_LAYER_0";
+            label = "TO_LAYER_df";
         };
 
         Mac_screenshot: Mac_screenshot {
@@ -139,25 +151,13 @@
             bindings = <&kp LS(LG(KP_NUMBER_5))>;
             label = "MAC_SCREENSHOT";
         };
-
-        to_default_layer: to_default_layer {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = 
-                <&to DEFAULT_LAYER_MAC_DESKTOP>,
-                <&to DEFAULT_LAYER_MAC_NOTE>,
-                <&to DEFAULT_LAYER_IPAD>,
-                <&to DEFAULT_LAYER_WIN_DESKTOP>,
-                <&to DEFAULT_LAYER_WIN_COMPANY>;
-            label = "TO_DEFAULT_LAYER";
-        };
     };
 
     behaviors {
         lt_to_layer_0: lt_to_layer_0 {
             compatible = "zmk,behavior-hold-tap";
             label = "LAYER_TAP_TO_0";
-            bindings = <&mo>, <&to_layer_0>;
+            bindings = <&mo>, <&to_layer_df>;
 
             #binding-cells = <2>;
             tapping-term-ms = <200>;
@@ -198,12 +198,12 @@
     keymap {
         compatible = "zmk,keymap";
 
-        default_layer {
+        DEFAULT_LAYER {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                   &kp T                                                                      &kp Y                   &kp U               &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt_to_layer_0 LAYER_FUNCTION J  &kp K      &kp L    &lt_to_layer_0 LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                   &kp B                   &mkp LCLK                   &kp AT_SIGN            &kp N                   &kp M               &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RIGHT_COMMAND TAB  &lt_to_layer_0 LAYER_ARROW ENTER  &kp LS(LG(N5))                                       &kp LS(LG(N5))
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2   &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1  &mt RIGHT_COMMAND TAB  &lt LAYER_ARROW ENTER  &kp LS(LG(N5))                                       &kp LS(LG(N5))
             >;
 
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
@@ -213,9 +213,9 @@
         DEFAULT_LAYER_MAC_NOTE {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                   &kp T                                                                      &kp Y                   &kp U               &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt_to_layer_0 LAYER_FUNCTION J  &kp K      &kp L    &lt_to_layer_0 LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                   &kp B                   &mkp LCLK                   &kp AT_SIGN            &kp N                   &kp M               &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RIGHT_COMMAND TAB  &lt_to_layer_0 LAYER_ARROW ENTER  &kp LS(LG(N5))                                       &kp LS(LG(N5))
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1  &mt RIGHT_COMMAND TAB  &lt LAYER_ARROW ENTER  &kp LS(LG(N5))                                       &kp LS(LG(N5))
             >;
 
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
@@ -224,9 +224,9 @@
         DEFAULT_LAYER_IPAD {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                   &kp T                                                                      &kp Y                   &kp U               &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt_to_layer_0 LAYER_FUNCTION J  &kp K      &kp L    &lt_to_layer_0 LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                   &kp B                   &mkp LCLK                   &kp AT_SIGN            &kp N                   &kp M               &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RIGHT_COMMAND TAB  &lt_to_layer_0 LAYER_ARROW ENTER  &kp LS(LG(N5))                                       &kp LS(LG(N5))
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1  &mt RIGHT_COMMAND TAB  &lt LAYER_ARROW ENTER  &kp LS(LG(N5))                                       &kp LS(LG(N5))
             >;
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
@@ -234,9 +234,9 @@
         DEFAULT_LAYER_WIN_DESKTOP {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                   &kp T                                                                      &kp Y                   &kp U               &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt_to_layer_0 LAYER_FUNCTION J  &kp K      &kp L    &lt_to_layer_0 LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                   &kp B                   &mkp LCLK                   &kp AT_SIGN            &kp N                   &kp M               &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RCTRL TAB    &lt_to_layer_0 LAYER_ARROW ENTER                                         &kp A
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1  &mt RCTRL TAB    &lt LAYER_ARROW ENTER                                         &kp A
             >;
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
@@ -244,9 +244,9 @@
         DEFAULT_LAYER_WIN_COMPANY {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                   &kp T                                                                      &kp Y                   &kp U               &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt_to_layer_0 LAYER_FUNCTION J  &kp K      &kp L    &lt_to_layer_0 LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                   &kp G                   &mkp RCLK                   &kp BACKSLASH          &kp H                   &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                   &kp B                   &mkp LCLK                   &kp AT_SIGN            &kp N                   &kp M               &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_to_layer_0 LAYER_ARROW LANG1  &lt_to_layer_0 LAYER_NUM SPACE  &lt_to_layer_0 LAYER_FUNCTION LANG2  &mt RCTRL TAB    &lt_to_layer_0 LAYER_ARROW ENTER                                         &kp A
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1  &mt RCTRL TAB    &lt LAYER_ARROW ENTER                                         &kp A
             >;
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
