@@ -41,12 +41,13 @@
 //AML関連設定
 &zip_temp_layer {
     excluded-positions = <
+        30 // M
         32 // .
         34 // LEFT_CONTROL
-        //Macroo対応のため不要 18 // J
-        //Macroo対応のため不要 22 // LEFT_SHIFT
-        //Macroo対応のため不要 33 // RIGHT_SHIFT
-        //Macroo対応のため不要 41 // RIGHT_COMMAND
+        //Macro対応のため不要 18 // J
+        //Macro対応のため不要 22 // LEFT_SHIFT
+        //Macro対応のため不要 33 // RIGHT_SHIFT
+        //Macro対応のため不要 41 // RIGHT_COMMAND
     >;
 };
 
@@ -81,6 +82,11 @@
         To_LayerARROW {
             bindings = <&mo LAYER_ARROW>;  // ARROWレイヤーに移動
             key-positions = <11 12>;
+        };
+
+        To_LayerSYMBOL {
+            bindings = <&mo LAYER_SYMBOL>;  // SYMBOLレイヤーに移動
+            key-positions = <23 24>;
         };
 
         To_LayerSETTING {
@@ -236,9 +242,9 @@
             bindings = <&kp>, <&kp_exit_AML>;
 
             #binding-cells = <2>;
-            tapping-term-ms = <200>;
+            tapping-term-ms = <150>;
             flavor = "balanced";
-            quick-tap-ms = <200>;
+            quick-tap-ms = <150>;
         };
     };
 
@@ -248,7 +254,7 @@
         DEFAULT_LAYER {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH          &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH          &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                     &kp AT_SIGN            &kp N                  &kp M                 &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
 &kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RIGHT_COMMAND TAB  &lt LAYER_ARROW ENTER                                            &kp LS(LG(N5))
             >;
@@ -259,7 +265,7 @@
         DEFAULT_LAYER_MAC_NOTE {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH          &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH          &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                     &kp AT_SIGN            &kp N                  &kp M                 &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
 &kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RIGHT_COMMAND TAB  &lt LAYER_ARROW ENTER                                            &kp LS(LG(N5))
             >;
@@ -270,7 +276,7 @@
         DEFAULT_LAYER_IPAD {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH          &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH          &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                     &kp AT_SIGN            &kp N                  &kp M                 &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
 &kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RIGHT_COMMAND TAB  &lt LAYER_ARROW ENTER                                            &kp LS(LG(N5))
             >;
@@ -281,9 +287,9 @@
         DEFAULT_LAYER_WIN_DESKTOP {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                  &kp T                                                             &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH  &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH  &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                     &kp AT_SIGN    &kp N                  &kp M                 &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RCTRL TAB  &lt LAYER_ARROW ENTER                                            &kp A
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RCTRL TAB  &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
             >;
 
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
@@ -292,9 +298,9 @@
         DEFAULT_LAYER_WIN_COMPANY {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                  &kp T                                                             &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH  &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_MOUSE MINUS
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                     &kp BACKSLASH  &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                     &kp AT_SIGN    &kp N                  &kp M                 &kp COMMA  &kp DOT  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RCTRL TAB  &lt LAYER_ARROW ENTER                                            &kp A
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RCTRL TAB  &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
             >;
 
             sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
@@ -331,10 +337,10 @@
 
         LAYER_SYMBOL {
             bindings = <
-&kp GRAVE        &kp TILDE     &kp CARET   &kp AMPERSAND  &kp PIPE                            &kp BACKSLASH   &kp SLASH         &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &kp MINUS
-&kp AT_SIGN      &kp HASH      &kp DOLLAR  &kp PERCENT    &kp CARET         &none      &none  &kp LEFT_BRACE  &kp RIGHT_BRACE   &kp UNDERSCORE    &kp EQUAL          &none
-&kp EXCLAMATION  &kp QUESTION  &kp COLON   &kp SEMICOLON  &kp SINGLE_QUOTE  &none      &none  &kp LESS_THAN   &kp GREATER_THAN  &kp SINGLE_QUOTE  &kp BACKSLASH      &none
-&none            &none         &none       &none          &none             &none      &none  &none                                                                  &none
+&none  &none  &none  &none  &none                      &none    &kp BACKSLASH   &kp SLASH     &kp TILDE  &kp PIPE
+&none  &none  &none  &none  &none  &none               &none   &none    &none  &kp LEFT_BRACE  &kp RIGHT_BRACE   &none
+&kp LEFT_SHIFT  &none  &none  &none  &none  &none               &none   &none    &none  &none  &none    &none
+&kp LCTRL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none      &mt RCTRL TAB  &kp RIGHT_COMMAND                          &none
             >;
         };
 
@@ -342,8 +348,8 @@
             bindings = <
 &none     &none      &none      &none      &none                           &none     &none      &none      &none      &none
 &mkp MB4  &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp MB5  &mkp RCLK      &none  &mkp MB4  &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp MB5
-&none     &none      &none      &none      &none     &mkp LCLK      &none  &none     &mkp LCLK  &none      &mkp RCLK  &none
-&none     &none      &none      &none      &none     &none          &none  &none                                      &none
+&kp LEFT_SHIFT     &none      &none      &none      &none     &mkp LCLK      &none  &none     &mkp LCLK  &none      &mkp RCLK  &none
+&kp LCTRL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none      &mt RCTRL TAB  &kp RIGHT_COMMAND                          &none
             >;
         };
 
@@ -351,8 +357,8 @@
             bindings = <
 &none  &none  &none  &none  &none                    &none  &none  &none  &none  &none
 &none  &none  &none  &none  &none  &none      &none  &none  &none  &none  &none  &none
-&none  &none  &none  &none  &none  &none      &none  &none  &none  &none  &none  &none
-&none  &none  &none  &none  &none  &none      &none  &none                       &none
+&kp LEFT_SHIFT  &none  &none  &none  &none  &none      &none  &none  &mkp LCLK       &none         &mkp RCLK  &none
+&kp LCTRL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none      &mt RCTRL TAB  &kp RIGHT_COMMAND                          &none
             >;
 
             sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
@@ -362,7 +368,7 @@
             bindings = <
 &trans  &trans        &trans        &trans        &trans                            &switch_to_mac_desktop  &switch_to_mac_note  &switch_to_ipad  &switch_to_win_desktop  &switch_to_win_company
 &trans  &trans        &trans        &trans        &trans  &trans      &trans        &trans                  &trans               &trans           &trans                  &trans
-&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp N4  &trans      &bootloader   &kp KP_NUMLOCK          &trans               &trans           &trans                  &bt BT_CLR
+&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp N4  &trans      &bootloader   &kp KP_NUMLOCK          &kp INS              &trans           &trans                  &bt BT_CLR
 &trans  &trans        &trans        &trans        &trans  &trans      &out OUT_USB  &out OUT_BLE                                                                          &bt BT_CLR_ALL
             >;
         };
