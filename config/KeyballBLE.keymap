@@ -38,8 +38,29 @@
 //#define SCROLL 5
 //#define NUM 6
 
-&trackball_listener {
-    input-processors = <&zip_temp_layer LAYER_MOUSE 10000>;
+//AML関連設定
+&zip_temp_layer {
+    excluded-positions = <
+        32 // .
+        34 // LEFT_CONTROL
+        //Macroo対応のため不要 18 // J
+        //Macroo対応のため不要 22 // LEFT_SHIFT
+        //Macroo対応のため不要 33 // RIGHT_SHIFT
+        //Macroo対応のため不要 41 // RIGHT_COMMAND
+    >;
+};
+
+//キー入力から一定時間はAMLを発動しない
+&zip_temp_layer {
+    require-prior-idle-ms = <200>;
+};
+//マウスキーを押したらタイムアウトを延長する
+&mkp_input_listener {
+    input-processors = <&zip_temp_layer 9 10000>;
+};
+//マウスキーを押すまでマウスレイヤーに留まる(マウスキーを押したらタイムアウトを延長すると同じ実装で、タイムアウト時間が違うだけ)
+&mkp_input_listener {
+    input-processors = <&zip_temp_layer 9 250>;
 };
 
 
@@ -146,6 +167,25 @@
             bindings = <&kp LS(LG(KP_NUMBER_5))>;
             label = "MAC_SCREENSHOT";
         };
+
+        //AML関連設定
+        exit_AML: exit_AML {
+            compatible = "zmk,behavior-macro";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <0>;
+            bindings = <&tog_off LAYER_MOUSE>;
+            label = "exit_AML";
+        };
+
+        kp_exit_AML: kp_exit_AML {
+            compatible = "zmk,behavior-macro-one-param";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <1>;
+            bindings = <&macro_param_1to1 &kp MACRO_PLACEHOLDER &exit_AML>;
+            label = "KP_exit_AML";
+        };
     };
 
     behaviors {
@@ -187,6 +227,18 @@
             bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
 
             tap-ms = <20>;
+        };
+
+        //AML   
+        mt_exit_AML_on_tap: mt_exit_AML_on_tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "MT_exit_AML_ON_TAP";
+            bindings = <&kp>, <&kp_exit_AML>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "balanced";
+            quick-tap-ms = <200>;
         };
     };
 

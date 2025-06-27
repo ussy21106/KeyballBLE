@@ -1,5 +1,9 @@
 #include "KeyballBLE.dtsi"
 
+&default_transform {
+    col-offset = <0>;  // 左側はオフセット0
+};
+
 &kscan0 {
         col-gpios
             = <&xiao_d 10 GPIO_ACTIVE_HIGH>
