@@ -6,6 +6,20 @@ config/boards/shields/KeyballBLE.*
 
 # Keymap backups
 config/KeyballBLE.keymap.*.bak
+config/KeyballBLE_*.keymap
 
 # Backup files
 *.overlay.bak_*
+
+# System files
+**/.DS_Store
+**/.DS_Store?
+**/._*
+**/.Spotlight-V100
+**/.Trashes
+**/ehthumbs.db
+**/Thumbs.db
+
+# Symlinks
+config/boards/shields/code.h
+
