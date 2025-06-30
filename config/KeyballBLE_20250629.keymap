@@ -33,7 +33,7 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <input/processors.dtsi>
 //USコードをJISに変えるコード
-#include "code.h"
+#include "boards/shields/Test/code.h"
 
 // Autoshift Macro（記号利用、通常キーは影響が大きいため）
 #define ASSYM(shifted, keycode) &auto_shift shifted keycode
@@ -77,7 +77,6 @@
 / {
     combos {
         compatible = "zmk,combos";
-        combo-term-ms = <30>;  // デフォルトは 50ms
 
         double_quotation {
             bindings = <&kp DOUBLE_QUOTES>;
@@ -127,35 +126,35 @@
         switch_to_mac_desktop: switch_to_mac_desktop {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4 &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 0 &tog_on DEFAULT_LAYER>;
+            bindings = <&tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 0 &tog_on DEFAULT_LAYER>;
             label = "SWITCH_TO_MAC_DESKTOP";
         };
 
         switch_to_mac_note: switch_to_mac_note {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4 &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 1 &tog_on DEFAULT_LAYER_MAC_NOTE>;
+            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 1 &tog_on DEFAULT_LAYER_MAC_NOTE>;
             label = "SWITCH_TO_MAC_NOTE";
         };
 
         switch_to_ipad: switch_to_ipad {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4 &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 2 &tog_on DEFAULT_LAYER_IPAD>;
+            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 2 &tog_on DEFAULT_LAYER_IPAD>;
             label = "SWITCH_TO_IPAD";
         };
 
         switch_to_win_desktop: switch_to_win_desktop {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4 &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 3 &tog_on DEFAULT_LAYER_WIN_DESKTOP>;
+            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 3 &tog_on DEFAULT_LAYER_WIN_DESKTOP>;
             label = "SWITCH_TO_WIN_DESKTOP";
         };
 
         switch_to_win_company: switch_to_win_company {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4 &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &bt BT_SEL 4 &tog_on DEFAULT_LAYER_WIN_COMPANY>;
+            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &bt BT_SEL 4 &tog_on DEFAULT_LAYER_WIN_COMPANY>;
             label = "SWITCH_TO_WIN_COMPANY";
         };
 
@@ -257,9 +256,9 @@
         auto_shift: auto_shift {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            tapping_term_ms = <230>;
-            quick_tap_ms = <150>;
-            flavor = "balanced";
+            tapping_term_ms = <200>;
+            quick_tap_ms = <0>;
+            flavor = "hold-preferred";
             bindings = <&kp>, <&kp>;
         };
     };
@@ -270,14 +269,13 @@
         DEFAULT_LAYER {
             bindings = <
 &kp Q             &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_TILDE_MAC, JP_CARET) &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_UNDERSCORE,JP_BACKSLASH)     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_BQ,JP_AT) &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &mt RIGHT_SHIFT SLASH
 &kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2     &lt LAYER_NUM SPACE     &lt LAYER_FUNCTION LANG1        &mt RIGHT_COMMAND TAB     &lt LAYER_ARROW ENTER   &kp LS(LG(N5))
 
             >;
 
-            //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
 
         DEFAULT_LAYER_MAC_NOTE {
@@ -299,20 +297,18 @@
 &kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1      &mt RIGHT_COMMAND TAB  &lt LAYER_ARROW ENTER                                            &kp LS(LG(N5))
             >;
 
-            //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
 
         DEFAULT_LAYER_WIN_DESKTOP {
             bindings = <
-&kp Q             &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_PIPE, RO)     &kp H           &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_TILDE, JP_CARET)  &kp N           &kp M                 ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1          &mt RCTRL TAB      &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
+&kp Q             &kp W         &kp E         &kp R                  &kp T                                                   &kp Y                               &kp U                 &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_UNDERSCORE,JP_BACKSLASH)     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_BQ,JP_AT) &kp N              &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &mt RIGHT_SHIFT SLASH
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG5      &mt RCTRL TAB  &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
             >;
 
-            //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
 
         DEFAULT_LAYER_WIN_COMPANY {
@@ -320,11 +316,10 @@
 &kp Q             &kp W         &kp E         &kp R                  &kp T                                                  &kp Y                                &kp U                 &kp I      &kp O    &kp P
 &kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         &kp S_PIPE     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         &kp JP_AT      &kp N              &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &mt RIGHT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1     &mt RCTRL TAB  &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION ZENNANKAKU     &mt RCTRL TAB  &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
             >;
 
-            //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
         };
 
         LAYER_ARROW {
@@ -338,7 +333,7 @@
 
         LAYER_NUM {
             bindings = <
-&kp EXCLAMATION  &kp S_DQUOTE  &kp HASH         &kp DOLLAR       &kp PERCENT                        &kp AMPERSAND    &kp SQT          &kp LS(N8)  &kp LS(N9)  &kp MINUS
+&kp EXCLAMATION  &kp DOUBLE_QUOTES  &kp HASH         &kp DOLLAR       &kp PERCENT                        &kp AMPERSAND    &kp SQT          &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp MINUS
 &kp KP_NUMBER_1  &kp KP_NUMBER_2    &kp KP_NUMBER_3  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &none      &none  &kp KP_NUMBER_6  &kp KP_NUMBER_7  &kp KP_NUMBER_8       &kp KP_NUMBER_9        &kp KP_NUMBER_0
 &none        &none          &none        &none        &none        &none      &none  &none            &none     &none             ASSYM(S_QUESTION, JP_SLASH)                   &kp UNDERSCORE
 &none        &none              &none            &none            &none            &none      &none  &none                                                                          &none
@@ -358,10 +353,10 @@
 
         LAYER_SYMBOL {
             bindings = <
-&none  &none  &none  &none  &none                      &none    &none   &none   &none           ASSYM(S_UNDERSCORE,JP_BACKSLASH)
-&none  &none  &none  &none  &none  &none               &none    &none   &none   &none    &none  ASSYM(S_DQUOTE,JP_AT)
-&none  &none  &none  &none  &none  &none               &none    &none   &none   &none    &none  &none
-&none     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none       &none   &none                          &none
+&none  &none  &none  &none  &none                      &kp S_TILDE   &kp S_BQ  &none   &none           ASSYM(S_PIPE, JP_YEN)
+&none  &none  &none  &none  &none  &none               &kp JP_BACKSLASH   &kp JP_YEN  &none   &none    &none  ASSYM(S_TILDE, JP_CARET)
+&none  &none  &none  &none  &none  &none               &none   &none  &none   &none    &none  ASSYM(S_QUESTION, JP_SLASH)
+&none     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none      &none  &none                          &none
             >;
         };
 
