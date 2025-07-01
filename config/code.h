@@ -4,103 +4,125 @@
 #pragma once
 #define RO 0x87  // JISキーボード「ろ」キー（¥）
 
-// === ✅ keys.h に存在しないが必要なキー定義（存在しない場合のみ追加） ===
-// なし（SCOLON は削除済み）
-
-// === ✅ JIS記号 → US物理キーボード入力に対応したマクロ定義（ASSYM形式用） ===
-
-#define JP_MINUS        MINUS             // ほキー（通常: -）✅ 出力OK（修正不要）
-#define S_EQUAL         LS(N0)            // ほキー（Shift: =）✅ 修正済み
-
-#define JP_SEMI         SEMICOLON         // れキー（通常: ;）
-#define S_PLUS          LS(SEMICOLON)     // れキー（Shift: +）✅ 修正済み
-
-#define JP_COLON        COLON             // けキー（通常: :）
-#define S_ASTERISK      LS(COLON)         // けキー（Shift: *）✅ 修正済み
-
-#define JP_CARET        EQUAL             // へキー（通常: ^）✅ 修正済み
-#define S_TILDE         LS(EQUAL)         // へキー（Shift: ~）✅ 修正済み
-
-#define JP_AT           LEFT_BRACKET      // @キー（通常: @）✅ 修正済み
-#define S_BQ            NO_OP             // @キー（Shift: `）※未対応記号のため NO_OP
-
-#define JP_BACKSLASH    RO                // ろキー（通常: \）✅ 修正済み
-#define S_UNDERSCORE    UNDERSCORE        // ろキー（Shift: _）
-
-#define JP_YEN          RO                // ¥キー（代替）✅ 修正済み
-#define S_PIPE          PIPE              // ¥キー（Shift: |）
-
-#define JP_LBRACKET     LEFT_BRACKET      // [キー（通常: [）
-#define S_LBRACKET      LEFT_BRACE        // [キー（Shift: {）
-
-#define JP_RBRACKET     RIGHT_BRACKET     // ]キー（通常: ]）
-#define S_RBRACKET      RIGHT_BRACE       // ]キー（Shift: }）
-
-#define JP_SLASH        SLASH             // めキー（通常: /）
-#define S_QUESTION      QUESTION          // めキー（Shift: ?）
-
-#define JP_COMMA        COMMA             // ねキー（通常: ,）
-#define S_LESS_THAN     LESS_THAN         // ねキー（Shift: <）
-
-#define JP_DOT          DOT               // るキー（通常: .）
-#define S_GREATER_THAN  GREATER_THAN      // るキー（Shift: >）
-
-#define S_DQUOTE        LS(N2)            // JIS配列での "（US配列では @ の位置）✅ 修正済み
-
-// Windows設定（記号出力ではないため、変換チェック対象外）
-#define ZENNANKAKU      CAPSLOCK      // Alt + CapsLock（半角全角切替）
-
-// === ✅ 変換不要（JIS/US共通）の記号一覧 ===
-// 以下は &kp でそのまま使える記号。ASSYMやdefine不要。
-// 確認・記録のためにここに明記します。
-
-// #define N1         // !（共通: Shift+1）
-// #define N2         // "（共通: Shift+2）
-// #define N3         // #（共通: Shift+3）
-// #define N4         // $（共通: Shift+4）
-// #define N5         // %（共通: Shift+5）
-// #define N6         // &（共通: Shift+6）
-// #define N7         // '（共通: Shift+7）
-// #define N8         // (（共通: Shift+8）
-// #define N9         // )（共通: Shift+9）
-// #define N0         // 0（共通）
-// #define GRAVE      // `（共通）
-// #define EQUAL      // =（共通）
-// #define MINUS      // -（共通）
-// #define SEMICOLON  // ;（共通）
-// #define COLON      // :（共通）
-// #define COMMA      // ,（共通）
-// #define DOT        // .（共通）
-// #define SLASH      // /（共通）
-// #define QUESTION   // ?（共通）
-// #define LBKT       // [（共通）
-// #define LEFT_BRACE // {（共通）
-// #define RBKT       // ]（共通）
-// #define RIGHT_BRACE // }（共通）
-// #define PIPE       // |（共通）
-// #define UNDERSCORE // _（共通）
-// #define LESS_THAN  // <（共通）
-// #define GREATER_THAN // >（共通）
-// #define TILDE      // ~（共通）
-// #define DQUOTE     // "（共通）
-
-
-// === ⚠️ US配列前提でのみ共通の記号一覧（JIS配列では異なる結果になるため注意） ===
-// 以下は &kp でそのまま使うと「JIS配列では意図しない記号が出る」例です。
-// この定義ファイルでは使用しないことを推奨
-
-// #define AT_SIGN     // US: @ → JISでは " が出る
-// #define ASTERISK    // US: * → JISでは + が出る
-// #define CARET       // US: ^ → JISでは 6 が出る
-// #define PLUS        // US: + → JISでは * が出る
-// #define BACKSLASH   // US: \ → JISでは ] が出る可能性あり
-// #define NON_US_BACKSLASH // US: ¥ → JISでは \ が出る
-
 // === 🍎 Mac専用：ZMK + US配列 → JIS記号補正マクロ ===
 // 環境依存で出力が異なるキーを、Macでの出力に合わせる補助定義
 // 使用例: ASSYM(S_TILDE_MAC, JP_CARET)
-
-#define S_TILDE_MAC         LS(SEMICOLON)     // Macでは ~ は Shift + ;（けキー）
 #define JP_YEN_MAC          NON_US_BACKSLASH  // Macでは ¥ は NON_US_BACKSLASH のままで出る
 #define S_BQ_MAC            GRAVE             // Macでは ` が正しく出る（WindowsではIME切替）
+
+// === ✅ keys.h に存在しないが必要なキー定義（存在しない場合のみ追加） ===
+// なし（SCOLON は削除済み）
+
+// === ✅ JIS記号 → US物理キーボード入力に対応したマクロ定義 ===
+// 1行目（数字キー行）
+#define JP_ZKHK   GRAVE     // 半角/全角
+
+#define JP_1      N1        // 1
+#define S_JP_1    LS(N1)    // !
+#define S_EXCL    S_JP_1    // !
+
+#define JP_2      N2        // 2
+#define S_JP_2    LS(N2)    // "
+#define S_DQUO    S_JP_2    // "
+
+
+#define JP_3      N3        // 3
+#define S_JP_3    LS(N3)    // #
+#define S_HASH    S_JP_3    // #
+
+#define JP_4      N4        // 4
+#define S_JP_4    LS(N4)    // $
+#define S_DLR    S_JP_4   // $
+
+#define JP_5      N5        // 5
+#define S_JP_5    LS(N5)    // %
+#define S_PERC   S_JP_5   // %
+
+#define JP_6      N6        // 6
+#define S_JP_6    LS(N6)    // &
+#define S_AMPR   S_JP_6   // &
+
+#define JP_7      N7        // 7
+#define S_JP_7    LS(N7)    // '
+#define S_QUOT   S_JP_7   // '
+
+#define JP_8      N8        // 8
+#define S_JP_8    LS(N8)    // (
+#define JP_LPAR   S_JP_8   // (
+#define S_LPRN    JP_LPAR   // (
+
+#define JP_9      N9        // 9
+#define S_JP_9    LS(N9)    // )
+#define JP_RPAR   S_JP_9   // )
+#define S_RPRN    JP_RPAR   // )
+
+#define JP_0      N0        // 0
+
+
+#define JP_MINS   MINUS     // -
+#define S_JP_MINS LS(JP_MINS) // =
+#define S_EQL    S_JP_MINS // =
+
+#define JP_CIRC   EQUAL     // ^
+#define S_JP_CIRC LS(JP_CIRC) // ~ (Shift+^)
+#define S_TILDE   S_JP_CIRC // ~
+
+#define JP_YEN      0x89      // ¥
+#define JP_YEN_MAC  JP_YEN  // Macでは ¥ は NON_US_BACKSLASH のままで出る
+#define S_PIPE      LS(JP_YEN) // |
+
+
+// 2行目（QWERTY行）
+#define JP_AT     LBKT      // @
+#define S_JP_AT   LS(LBKT)  // `
+#define S_BQ     S_JP_AT   // `
+#define S_BQ_MAC  GRAVE     // Macでは ` が正しく出る（WindowsではIME切替）
+
+#define JP_LBKT   RBKT      // [
+#define S_JP_LBKT LS(JP_LBKT)  // {
+#define S_LCBR   S_JP_LBKT // {
+
+// 3行目（ASDF行）
+#define JP_SCLN   SEMI      // ;
+#define S_JP_SCLN LS(JP_SCLN)  // +
+#define S_PLUS   S_JP_SCLN // +
+
+#define JP_COLN   QUOT      // :
+#define S_JP_COLN LS(JP_COLN)  // *
+#define S_ASTR   S_JP_COLN // *
+
+#define JP_RBKT   BSLH      // ]
+#define S_JP_RBKT LS(JP_RBKT)  // }
+#define S_RCBR   S_JP_RBKT // }
+
+// 4行目（ZXCV行）
+#define JP_COMMA  COMMA     // ,
+#define S_LESS_THAN   LS(JP_COMMA)   // <
+#define JP_DOT    DOT       // .
+#define S_GREATER_THAN     LS(JP_DOT)   // >
+#define JP_SLASH  SLASH     // /
+#define S_QUESTION LS(JP_SLASH) // ?
+#define JP_BSLS   0x89     // backslash(¥)
+#define S_JP_BSLS LS(RO) // _
+#define S_UNDS   S_JP_BSLS // _
+
+
+// 特殊キー
+#define JP_HENK   INT4      // 変換
+#define JP_MHEN   INT5      // 無変換
+#define JP_KANA   INT2      // カタカナ/ひらがな
+
+// その他のエイリアス
+#define JP_LBRC   S_JP_LBKT  // {
+#define JP_RBRC   S_JP_RBKT  // }
+#define JP_SEMI   JP_SCLN  // ;
+#define JP_COLON  JP_COLN  // :
+#define JP_STAR   S_JP_COLN  // *
+#define JP_UNDER  S_JP_BSLS  // _
+#define JP_BSLASH JP_BSLS  // Backslash 
+#define JP_GRAVE  S_JP_AT   // `
+#define JP_DQUOT  S_DQUO  // "
+#define JP_SQUOT  S_QUOT  // '
+
+
 
