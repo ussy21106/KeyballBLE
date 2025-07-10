@@ -11,13 +11,17 @@
 
 // 機能レイヤー
 
-#define LAYER_ARROW 5      // 矢印キーレイヤー
-#define LAYER_NUM 6   // 数字キーレイヤー
-#define LAYER_FUNCTION 7   // ファンクションキーレイヤー
-#define LAYER_SYMBOL 8     // 記号レイヤー
-#define LAYER_MOUSE 9      // マウス操作レイヤー
-#define LAYER_SCROLL 10     // スクロールレイヤー
-#define LAYER_SETTINGS 11  // 設定レイヤー
+#define LAYER_ARROW_MAC 5      // 矢印移動Macキーレイヤー
+#define LAYER_ARROW_WIN 6      // 矢印移動Winキーレイヤー
+#define LAYER_NUM 7   // 数字キーレイヤー
+#define LAYER_FUNCTION 8   // ファンクションキーレイヤー
+#define LAYER_SYMBOL 9     // 記号レイヤー
+#define LAYER_10 10     // 記号レイヤー
+#define LAYER_11 11     // 記号レイヤー
+#define LAYER_12 12     // 記号レイヤー
+#define LAYER_MOUSE 13      // マウス操作レイヤー
+#define LAYER_SCROLL 14   // スクロールレイヤー
+#define LAYER_SETTINGS 15  // 設定レイヤー
 
 // 接続先ごとのデフォルトレイヤーを定義
 #define BT_PROFILE_0 DEFAULT_LAYER  // 接続先1: デスクトップMac
@@ -48,7 +52,8 @@
         30 // M
         32 // .
         34 // LEFT_CONTROL
-        //Macro対応のため不要 18 // J
+        13 // F
+        18 // J
         //Macro対応のため不要 22 // LEFT_SHIFT
         //Macro対応のため不要 33 // RIGHT_SHIFT
         //Macro対応のため不要 41 // RIGHT_COMMAND
@@ -61,11 +66,11 @@
 };
 //マウスキーを押したらタイムアウトを延長する
 &mkp_input_listener {
-    input-processors = <&zip_temp_layer 9 10000>;
+    input-processors = <&zip_temp_layer LAYER_MOUSE 10000>;
 };
 //マウスキーを押すまでマウスレイヤーに留まる(マウスキーを押したらタイムアウトを延長すると同じ実装で、タイムアウト時間が違うだけ)
 &mkp_input_listener {
-    input-processors = <&zip_temp_layer 9 250>;
+    input-processors = <&zip_temp_layer LAYER_MOUSE 250>;
 };
 
 
@@ -84,14 +89,17 @@
             key-positions = <20 21>;
         };
 
-        To_LayerARROW {
-            bindings = <&mo LAYER_ARROW>;  // ARROWレイヤーに移動
-            key-positions = <11 12>;
-        };
+//        To_LayerARROW {
+//            bindings = <&mo LAYER_ARROW>;  // ARROWレイヤーに移動
+//            key-positions = <11 12>;
+//        };
 
         To_LayerSYMBOL {
-            bindings = <&mo LAYER_SYMBOL>;  // SYMBOLレイヤーに移動
-            key-positions = <23 24>;
+            timeout-ms = <50>;
+            bindings = <&togle_symbol>;  // SYMBOLレイヤーに移動して、英数キーを押す
+            //key-positions = <23 24>;
+            key-positions = <11 12>;
+            layers = <0 1 2 3 4 LAYER_SYMBOL>;  // 全レイヤーで有効
         };
 
         To_LayerSETTING {
@@ -135,35 +143,35 @@
         switch_to_mac_desktop: switch_to_mac_desktop {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 0 &tog_on DEFAULT_LAYER>;
+            bindings = <&all_BT_Disc &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 0 &tog_on DEFAULT_LAYER>;
             label = "SWITCH_TO_MAC_DESKTOP";
         };
 
         switch_to_mac_note: switch_to_mac_note {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 1 &tog_on DEFAULT_LAYER_MAC_NOTE>;
+            bindings = <&all_BT_Disc &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 1 &tog_on DEFAULT_LAYER_MAC_NOTE>;
             label = "SWITCH_TO_MAC_NOTE";
         };
 
         switch_to_ipad: switch_to_ipad {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 2 &tog_on DEFAULT_LAYER_IPAD>;
+            bindings = <&all_BT_Disc &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_WIN_DESKTOP &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 2 &tog_on DEFAULT_LAYER_IPAD>;
             label = "SWITCH_TO_IPAD";
         };
 
         switch_to_win_desktop: switch_to_win_desktop {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 3 &tog_on DEFAULT_LAYER_WIN_DESKTOP>;
+            bindings = <&all_BT_Disc &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_COMPANY &bt BT_SEL 3 &tog_on DEFAULT_LAYER_WIN_DESKTOP>;
             label = "SWITCH_TO_WIN_DESKTOP";
         };
 
         switch_to_win_company: switch_to_win_company {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &bt BT_SEL 4 &tog_on DEFAULT_LAYER_WIN_COMPANY>;
+            bindings = <&all_BT_Disc &tog_off DEFAULT_LAYER &tog_off DEFAULT_LAYER_MAC_NOTE &tog_off DEFAULT_LAYER_IPAD &tog_off DEFAULT_LAYER_WIN_DESKTOP &bt BT_SEL 4 &tog_on DEFAULT_LAYER_WIN_COMPANY>;
             label = "SWITCH_TO_WIN_COMPANY";
         };
 
@@ -184,8 +192,15 @@
         Mac_screenshot: Mac_screenshot {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LS(LG(KP_NUMBER_5))>;
+            bindings = <&kp LG(LS(N5))>;
             label = "MAC_SCREENSHOT";
+        };
+
+        Win_screenshot: Win_screenshot {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(LS(S))>;
+            label = "WIN_SCREENSHOT";
         };
 
         //AML関連設定
@@ -205,6 +220,26 @@
             #binding-cells = <1>;
             bindings = <&macro_param_1to1 &kp MACRO_PLACEHOLDER &exit_AML>;
             label = "KP_exit_AML";
+        };
+
+        // 数字レイヤー移動 + 英数キー
+        togle_num: togle_num {
+            label = "TOGGLE_NUM";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = 
+                <&kp LANG2>,       // 英数キー
+                <&tog LAYER_NUM>;  // 数字レイヤーに移動
+        };
+
+        // 記号レイヤー移動 + 英数キー
+        togle_symbol: togle_symbol {
+            label = "TOGGLE_SYMBOL";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = 
+                <&kp LANG2>,          // 英数キー
+                <&tog LAYER_SYMBOL>;  // 記号レイヤーに移動
         };
     };
 
@@ -246,10 +281,30 @@
             #sensor-binding-cells = <0>;
             bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
 
-            tap-ms = <20>;
+            //tap-ms = <20>;
         };
 
-        //AML   
+        scroll_encoder: scroll_encoder {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&scroll_down>, <&scroll_up>;
+        };
+
+        // 上スクロール（小刻みに複数回）
+        scroll_up: scroll_up {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&msc SCRL_UP &msc SCRL_UP>;  // 2回送信で滑らか
+        };
+
+        // 下スクロール（小刻みに複数回）
+        scroll_down: scroll_down {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&msc SCRL_DOWN &msc SCRL_DOWN>;  // 2回送信で滑らか
+        };
+
+        //AML
         mt_exit_AML_on_tap: mt_exit_AML_on_tap {
             compatible = "zmk,behavior-hold-tap";
             label = "MT_exit_AML_ON_TAP";
@@ -265,9 +320,53 @@
         auto_shift: auto_shift {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            tapping_term_ms = <230>;
-            quick_tap_ms = <150>;
-            flavor = "balanced";
+            tapping_term_ms = <180>;
+            quick_tap_ms = <200>;
+            flavor = "tap-preferred";
+            require-prior-idle-ms = <120>;
+            bindings = <&kp>, <&kp>;
+        };
+
+        //このあたりは検討の余地あり。Excel系には使えないっぽい
+        // 拡大縮小用エンコーダー設定
+        zoom_encoder: zoom_encoder {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&zoom_in_wheel>, <&zoom_out_wheel>;
+        };
+
+        // マウスホイール+Ctrlで拡大
+        zoom_in_wheel: zoom_in_wheel {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(MINUS)>;
+        };
+
+        // マウスホイール+Ctrlで縮小  
+        zoom_out_wheel: zoom_out_wheel {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(PLUS)>;
+        };
+
+        //移動レイヤートグル
+        lt_arrow_tog: lt_arrow_tog {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_ARROW_TOG";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&tog>, <&kp>;
+        };
+
+        //IME切替
+        chg_ime: chg_ime {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            flavor = "tap-preferred";
             bindings = <&kp>, <&kp>;
         };
     };
@@ -282,78 +381,92 @@
 // |  Z (左シフト)  |  X  |  C  |  V  |  B  |  左クリック  |               |  チルダ/  
 // |
 
-&mt ESCAPE Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_BQ, JP_AT)           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2     &lt LAYER_NUM SPACE     &lt LAYER_FUNCTION LANG1        &mt RIGHT_COMMAND TAB     &lt LAYER_ARROW ENTER   &kp LS(LG(N5))
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F                  &kp G                &none                          ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &lt_arrow_tog LAYER_ARROW_MAC J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &kp LA(LG(V))                  &chg_ime LANG1 LANG2          &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW_MAC ESCAPE     &lt LAYER_NUM SPACE   &lt LAYER_FUNCTION LG(LS(N5))  &mt RIGHT_COMMAND TAB &lt LAYER_ARROW_MAC ENTER    &kp JP_AT 
             >;
 
             //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&scroll_encoder>;  // スクロール用のセンサーバインディング
         };
 
         DEFAULT_LAYER_MAC_NOTE {
             bindings = <
-&mt ESCAPE Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_BQ, JP_AT)           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2     &lt LAYER_NUM SPACE     &lt LAYER_FUNCTION LANG1        &mt RIGHT_COMMAND TAB     &lt LAYER_ARROW ENTER   &kp LS(LG(N5))
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F                  &kp G                &none                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &kp ESCAPE                         ASSYM(S_BQ, JP_AT)           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW_MAC ESCAPE     &lt LAYER_NUM SPACE &lt LAYER_FUNCTION &Mac_screenshot &mt RIGHT_COMMAND TAB &lt LAYER_ARROW_MAC ENTER &kp JP_AT
             >;
 
-            sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
+            sensor-bindings = <&scroll_encoder>;
         };
 
         DEFAULT_LAYER_IPAD {
             bindings = <
-&mt ESCAPE Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_BQ, JP_AT)           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2     &lt LAYER_NUM SPACE     &lt LAYER_FUNCTION LANG1        &mt RIGHT_COMMAND TAB     &lt LAYER_ARROW ENTER   &kp LS(LG(N5))
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F                  &kp G                &none                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &lt LAYER_FUNCTION J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &kp ESCAPE                         ASSYM(S_BQ, JP_AT)           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW_MAC ESCAPE     &lt LAYER_NUM SPACE &lt LAYER_FUNCTION &Mac_screenshot &mt RIGHT_COMMAND TAB &lt LAYER_ARROW_MAC ENTER &kp JP_AT
             >;
 
             //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&scroll_encoder>;  // スクロール用のセンサーバインディング
         };
 
         DEFAULT_LAYER_WIN_DESKTOP {
             bindings = <
-&mt ESCAPE Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_BQ, JP_AT)           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1          &mt RCTRL TAB      &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
-            >;
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F  &kp G                &none                          ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &lt_arrow_tog LAYER_ARROW_WIN J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V  &kp B                &kp ESCAPE                     &chg_ime LANG1 LANG2         &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI         &lt LAYER_ARROW_WIN ESCAPE     &lt LAYER_NUM SPACE &lt LAYER_FUNCTION LG(LS(S)) &mt RCTRL TAB &lt LAYER_ARROW_WIN ENTER      &kp JP_AT
+
+            >;  
 
             //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&scroll_encoder>;  // スクロール用のセンサーバインディング
         };
 
         DEFAULT_LAYER_WIN_COMPANY {
             bindings = <
-&mt ESCAPE Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F                  &kp G                &mkp RCLK                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &mkp LCLK                         ASSYM(S_BQ, JP_AT)           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
-&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW LANG2  &lt LAYER_NUM SPACE  &lt LAYER_FUNCTION LANG1          &mt RCTRL TAB      &lt LAYER_ARROW ENTER                                            &kp LG(LS(S))
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F                  &kp G                &none                         ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_SCROLL MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &kp LANG2                     &kp LANG1           &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &kp RIGHT_SHIFT
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt LAYER_ARROW_WIN ESCAPE     &lt LAYER_NUM SPACE &lt LAYER_FUNCTION &Win_screenshot &mt RCTRL TAB &lt LAYER_ARROW_WIN ENTER &kp JP_AT
             >;
 
             //sensor-bindings = <&ROTATE SCRL_DOWN SCRL_UP>;
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            sensor-bindings = <&scroll_encoder>;  // スクロール用のセンサーバインディング
         };
 
-        LAYER_ARROW {
+
+        LAYER_ARROW_MAC {
             bindings = <
-&kp ESCAPE        &none  &none  &none          &none                            &none     &kp HOME        &none         &kp END          &kp BACKSPACE
-&kp TAB           &kp LA(LG(UP_ARROW))   &kp LC(LEFT_ARROW)      &kp LC(RIGHT_ARROW)      &kp BACKSPACE  &none      &none  &kp LEFT  &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT_ARROW  &none
-&kp LEFT_SHIFT    &kp LA(LG(DOWN_ARROW)) &kp LA(LG(LEFT_ARROW))  &kp LA(LG(RIGHT_ARROW))  &kp DELETE     &none      &none  &none     &mkp LCLK       &none         &mkp RCLK        &none
-&kp LEFT_CONTROL  &none  &none  &none          &none          &none      &none  &kp ENTER                                                    &kp RIGHT_SHIFT
+&kp ESCAPE        &none  &none  &none          &none                                                                    &none       &kp HOME          &none         &kp END           &none
+&kp TAB           &kp LA(LG(UP_ARROW))   &kp LC(LEFT_ARROW)      &kp LC(RIGHT_ARROW)      &none  &none      &none       &kp LEFT    &kp DOWN_ARROW    &kp UP_ARROW  &kp RIGHT_ARROW   &kp LG(JP_LBKT)
+&kp LEFT_SHIFT    &kp LA(LG(DOWN_ARROW)) &kp LA(LG(LEFT_ARROW))  &kp LA(LG(RIGHT_ARROW))  &none  &none      &none       &kp DELETE  &none             &none         &none             &kp LG(JP_RBKT)
+&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_GUI  &kp LG(Z)           &kp LG(Y)           &none                             &none      &lt_arrow_tog LAYER_ARROW_MAC BACKSPACE                                   &none
             >;
+
+            sensor-bindings = <&scroll_encoder>;  // スクロール用のセンサーバインディング
+        };
+
+        LAYER_ARROW_WIN {
+            bindings = <
+&kp ESCAPE        &none         &none                      &none                 &none                                 &none       &kp HOME        &none         &kp END          &none
+&kp TAB           &none         &kp LC(LEFT_ARROW)         &kp LC(RIGHT_ARROW)   &kp F12         &none      &none      &kp LEFT    &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT_ARROW  &kp LA(LEFT)
+&kp LEFT_SHIFT    &kp X         &kp C                      &kp V                 &kp LC(MINUS)   &none      &none      &kp DELETE  &none           &none         &none            &kp LA(RIGHT)
+&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_GUI               &kp LG(Z)             &kp Y           &none                 &none       &lt_arrow_tog LAYER_ARROW_WIN BACKSPACE        &none
+            >;
+            sensor-bindings = <&scroll_encoder>;  // スクロール用のセンサーバインディング
         };
 
         LAYER_NUM {
             bindings = <
-&kp S_EXCL  &kp S_DQUO  &kp HASH     &kp S_DLR    &kp S_PERC                     &kp S_AMPR       &kp S_QUOT     &kp S_LPRN   &kp S_RPRN       ASSYM(S_EQL, JP_MINS)
+&kp S_EXCL  &kp S_DQUO  &kp HASH     &kp S_DLR    &kp S_PERC                     &kp S_AMPR       &kp S_QUOT     &kp S_LPRN   &kp S_RPRN       &kp JP_MINS
 &kp JP_1    &kp JP_2    &kp JP_3     &kp JP_4     &kp JP_5     &none      &none  &kp JP_6         &kp JP_7       &kp JP_8     &kp JP_9         &kp JP_0
-&none        &none      &none        &none        &none        &none      &none  &none            &kp S_ASTR     &kp S_PLUS   ASSYM(S_QUESTION, JP_SLASH)     ASSYM(S_UNDS, JP_BSLS)
-&none        &none      &none        &none        &none        &none      &none  &none            &none          &none        &none
+&trans        &none      &none        &none        &none        &kp LANG2      &kp LANG1  &kp JP_EQL      &kp S_ASTR     &kp S_PLUS   ASSYM(S_QUESTION, JP_SLASH)     ASSYM(S_UNDS, JP_BSLS)
+&trans        &trans      &trans        &kp ENTER            &none     &none            &mt RCTRL TAB      &kp ENTER        &none
             >;
         };
 
@@ -362,18 +475,45 @@
 &kp F1                  &kp F2                 &kp F3                  &kp F4                   &kp F5                    &kp F6  &kp F7                &kp F8                 &kp F9         &kp F10
 &none                   &none   &none      &none      &none   &none      &kp LC(JP_MINS)  &none   ASSYM(S_LCBR, JP_LBKT)  ASSYM(S_RCBR, JP_RBKT)  ASSYM(S_PLUS, JP_SEMI)  &kp F11
 &kp LEFT_SHIFT          &none   &none      &none  &none   &none      &none  &none   &none  &none  ASSYM(S_ASTR, JP_COLN)  &kp F12
-&kp LEFT_CONTROL        &none                  &none                   &none                    &none   &kp RCTRL  &none  &none                                                        ASSYM(S_TILDE, JP_CIRC)
+&kp LEFT_CONTROL        &trans  &trans     &none  &none   &none                               &kp RCTRL  &none                                                        ASSYM(S_TILDE, JP_CIRC)
             >;
 
-            sensor-bindings = <&inc_dec_kp LC(PAGE_UP) LC(PAGE_DOWN)>;
+            sensor-bindings = <&scroll_encoder>;
         };
 
         LAYER_SYMBOL {
             bindings = <
-&none  &none  &none  &none  &none                      &none    &none   &none   &none           &none
-&none  &none  &none  &none  &none  &none               &none    &none   &none   &none    &none  &none
-&none  &none  &none  &none  &none  &none               &none    &none   &none   &none    &none  &none
-&none     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none       &none   &none                          &none
+&none  &none  &none  &none  &none                                          &none       &none   ASSYM(S_EQL, JP_MINS)    ASSYM(S_TILDE, JP_CIRC)   ASSYM(S_PIPE, JP_YEN_MAC)
+&none  &none  &none  &none  &none  &none                        &none      &none       &none   &none                    ASSYM(S_BQ, JP_AT)        ASSYM(S_LCBR, JP_LBKT)
+&kp LEFT_SHIFT  &none  &none  &none  &none  &kp LANG2           &kp LANG1      &none       &none   ASSYM(S_PLUS, JP_SEMI)   ASSYM(S_ASTR, JP_COLN)    ASSYM(S_RCBR, JP_RBKT)
+&kp LEFT_CONTROL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none       &kp RCTRL   &none                          &none
+            >;
+        };
+
+LAYER_10  {
+            bindings = <
+&none  &none  &none  &none  &none                                          &none       &none   ASSYM(S_EQL, JP_MINS)    ASSYM(S_TILDE, JP_CIRC)   ASSYM(S_PIPE, JP_YEN_MAC)
+&none  &none  &none  &none  &none  &none                        &none      &none       &none   &none                    ASSYM(S_BQ, JP_AT)        ASSYM(S_LCBR, JP_LBKT)
+&kp LEFT_SHIFT  &none  &none  &none  &none  &kp LANG2           &kp LANG1      &none       &none   ASSYM(S_PLUS, JP_SEMI)   ASSYM(S_ASTR, JP_COLN)    ASSYM(S_RCBR, JP_RBKT)
+&kp LEFT_CONTROL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none       &kp RCTRL   &none                          &none
+            >;
+        };
+
+LAYER_11  {
+            bindings = <
+&none  &none  &none  &none  &none                                          &none       &none   ASSYM(S_EQL, JP_MINS)    ASSYM(S_TILDE, JP_CIRC)   ASSYM(S_PIPE, JP_YEN_MAC)
+&none  &none  &none  &none  &none  &none                        &none      &none       &none   &none                    ASSYM(S_BQ, JP_AT)        ASSYM(S_LCBR, JP_LBKT)
+&kp LEFT_SHIFT  &none  &none  &none  &none  &kp LANG2           &kp LANG1      &none       &none   ASSYM(S_PLUS, JP_SEMI)   ASSYM(S_ASTR, JP_COLN)    ASSYM(S_RCBR, JP_RBKT)
+&kp LEFT_CONTROL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none       &kp RCTRL   &none                          &none
+            >;
+        };
+
+LAYER_12  {
+            bindings = <
+&none  &none  &none  &none  &none                                          &none       &none   ASSYM(S_EQL, JP_MINS)    ASSYM(S_TILDE, JP_CIRC)   ASSYM(S_PIPE, JP_YEN_MAC)
+&none  &none  &none  &none  &none  &none                        &none      &none       &none   &none                    ASSYM(S_BQ, JP_AT)        ASSYM(S_LCBR, JP_LBKT)
+&kp LEFT_SHIFT  &none  &none  &none  &none  &kp LANG2           &kp LANG1      &none       &none   ASSYM(S_PLUS, JP_SEMI)   ASSYM(S_ASTR, JP_COLN)    ASSYM(S_RCBR, JP_RBKT)
+&kp LEFT_CONTROL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none       &kp RCTRL   &none                          &none
             >;
         };
 
@@ -393,8 +533,8 @@
 &kp LEFT_SHIFT  &none  &none  &none  &none  &none      &none  &none  &mkp LCLK       &none         &mkp RCLK  &none
 &kp LCTRL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none      &mt RCTRL TAB  &kp RIGHT_COMMAND                          &none
             >;
-
-            sensor-bindings = <&scroll_up_down>;  // スクロール用のセンサーバインディング
+            //マウススクロール用のセンサーバインディング
+            sensor-bindings = <&scroll_up_down>;
         };
 
         LAYER_SETTINGS {

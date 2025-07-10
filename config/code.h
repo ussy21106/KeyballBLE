@@ -60,8 +60,8 @@
 
 
 #define JP_MINS   MINUS     // -
-#define S_JP_MINS LS(JP_MINS) // =
-#define S_EQL    S_JP_MINS // =
+#define JP_EQL    LS(JP_MINS) // =
+#define S_EQL     JP_EQL // =
 
 #define JP_CIRC   EQUAL     // ^
 #define S_JP_CIRC LS(JP_CIRC) // ~ (Shift+^)
