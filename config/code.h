@@ -7,8 +7,8 @@
 // === 🍎 Mac専用：ZMK + US配列 → JIS記号補正マクロ ===
 // 環境依存で出力が異なるキーを、Macでの出力に合わせる補助定義
 // 使用例: ASSYM(S_TILDE_MAC, JP_CARET)
-#define JP_YEN_MAC          NON_US_BACKSLASH  // Macでは ¥ は NON_US_BACKSLASH のままで出る
-#define S_BQ_MAC            GRAVE             // Macでは ` が正しく出る（WindowsではIME切替）
+//#define JP_YEN_MAC          NON_US_BACKSLASH  // Macでは ¥ は NON_US_BACKSLASH のままで出る
+//#define S_BQ_MAC            GRAVE             // Macでは ` が正しく出る（WindowsではIME切替）
 
 // === ✅ keys.h に存在しないが必要なキー定義（存在しない場合のみ追加） ===
 // なし（SCOLON は削除済み）

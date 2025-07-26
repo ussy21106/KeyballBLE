@@ -23,3 +23,6 @@ config/KeyballBLE_*.keymap
 # Symlinks
 config/boards/shields/code.h
 
+#確認用
+config/encoder_behaviors.h
+
