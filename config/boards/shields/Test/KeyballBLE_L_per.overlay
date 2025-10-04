@@ -1,0 +1,49 @@
+// ===== 6. keyballBLE_dongle/KeyballBLE_L_peripheral.overlay (新規作成) =====
+// 左側Peripheral用レイアウト - ドングル接続対応
+
+#include "KeyballBLE.dtsi"
+#include <dt-bindings/pinctrl/nrf-pinctrl.h>
+
+&default_transform {
+    col-offset = <0>;  // 左側はオフセット0（既存と同じ）
+};
+
+&kscan0 {
+    col-gpios
+        = <&xiao_d 10 GPIO_ACTIVE_HIGH>
+        , <&xiao_d 9 GPIO_ACTIVE_HIGH> 
+        , <&xiao_d 8 GPIO_ACTIVE_HIGH> 
+        , <&xiao_d 7 GPIO_ACTIVE_HIGH> 
+        , <&gpio0 10 GPIO_ACTIVE_HIGH>
+        , <&gpio0 9 GPIO_ACTIVE_HIGH>
+        ;
+};
+
+/* ✅ Peripheral では sensors を “okay” にしない方が安全（中央に任せる） */
+/* ▼ QDEC: pinctrl 方式（A）を使う場合 */
+/* ▼ QDEC 用 pinctrl（default / sleep の2状態を用意する） */
+&pinctrl {
+    qdec_default: qdec_default {
+        group1 {
+            /* D5(P0.05) → QDEC_A,  D0(P0.02) → QDEC_B */
+            psels = <NRF_PSEL(QDEC_A, 0, 2) NRF_PSEL(QDEC_B, 0, 5)>;
+            bias-pull-up;
+        };
+    };
+};
+
+
+/* ★ QDECノードに steps と pinctrl の default/sleep を指定する */
+&qdec0 {
+    status = "okay";
+    steps = <24>;
+    led-pre = <0>;
+
+    pinctrl-0 = <&qdec_default>;
+    pinctrl-names = "default";
+};
+
+/* ★ Peripheral側は参照先だけQDECに差し替え（statusは付けない） */
+&sensors {
+    sensors = <&qdec0>;
+};

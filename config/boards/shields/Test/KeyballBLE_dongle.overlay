@@ -1,0 +1,58 @@
+/*
+ * nRF52840 MDK USB Dongle を ZMK ドングル（Central + USB HID）として使うための overlay。
+ * 物理キーは持たないので mock_kscan を使用する。
+ */
+
+#include "KeyballBLE_dongle.dtsi"
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <input/processors.dtsi>
+#include <dt-bindings/zmk/input_transform.h>
+
+#define LAYER_MOUSE 13
+#define LAYER_SCROLL 14
+
+/ {
+    chosen {
+        zmk,kscan = &mock_kscan;
+        zmk,matrix-transform = &default_transform;
+    };
+
+    // ★Y軸移動をスクロールに変換するprocessor
+    zip_xy_to_scroll: zip_xy_to_scroll {
+        compatible = "zmk,input-processor-code-mapper";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_REL>;
+        map = <INPUT_REL_Y INPUT_REL_WHEEL>;
+    };
+
+    trackball_listener: trackball_listener {
+        compatible = "zmk,input-listener";
+        status = "okay";
+        device = <&trackball_split>;
+        input-processors = <&zip_temp_layer LAYER_MOUSE 10000>;
+    };
+
+    /* 追加：スクロール専用（子ノードあり） */
+    trackball_listener_scroll: trackball_listener_scroll {
+        compatible = "zmk,input-listener";
+        status = "okay";
+        device = <&trackball_split>;
+
+        /* 子ノードに“このレイヤのときだけ有効”なプロセッサ列を置く */
+        scroller {
+        status = "okay";
+        /* ← ここが重要。これがあるとビルド時にレイヤ用のマクロが展開されます */
+        layers = <LAYER_SCROLL>;
+
+        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>,
+                                <&zip_xy_scaler 1 10>,
+                                <&zip_xy_to_scroll_mapper>;
+        };
+    };
+};
+
+/* ★右トラックボールのスプリット入力“受信口”を有効化 */
+&trackball_split {
+    status = "okay";
+};
+
