@@ -1,4 +1,5 @@
 name: KeyballBLE
 build:
+  cmake: config/CMakeLists.txt
   settings:
     board_root: config
