@@ -1,7 +1,7 @@
 // ===== 6. keyballBLE_dongle/KeyballBLE_L_peripheral.overlay (新規作成) =====
 // 左側Peripheral用レイアウト - ドングル接続対応
 
-#include "KeyballBLE.dtsi"
+#include "../../common/KeyballBLE.dtsi"
 #include <dt-bindings/pinctrl/nrf-pinctrl.h>
 
 &default_transform {

@@ -1,0 +1,1027 @@
+/* 修飾キー/キーコードの定数を使うために必要 */
+#if !defined(KEYBALL_VARIANT_BLE) && !defined(KEYBALL_VARIANT_DONGLE)
+#error "Define KEYBALL_VARIANT_BLE or KEYBALL_VARIANT_DONGLE before including KeyballBLE.common.keymap"
+#endif
+
+#if defined(KEYBALL_VARIANT_BLE) && defined(KEYBALL_VARIANT_DONGLE)
+#error "Only one of KEYBALL_VARIANT_BLE or KEYBALL_VARIANT_DONGLE can be defined"
+#endif
+
+#include <dt-bindings/zmk/modifiers.h>
+#include <dt-bindings/zmk/keys.h>
+
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 120    // default: 10
+
+// レイヤー定義
+// デフォルトレイヤー (接続先ごと)
+
+#if defined(KEYBALL_VARIANT_DONGLE)
+#define DEFAULT_LAYER          0  // Mac用デフォルトレイヤー
+#define DEFAULT_LAYER_WIN_DESKTOP 3  // Windows用デフォルトレイヤー
+#else
+#define DEFAULT_LAYER 0  // デスクトップMac用
+#define DEFAULT_LAYER_WIN_DESKTOP 3  // デスクトップWin用
+#endif
+
+#define INSERT_MAC_LAYER 1
+#define LAYER_ARROW_MAC 2      // 矢印移動Macキーレイヤー
+
+#define INSERT_WIN_LAYER 4
+#define LAYER_ARROW_WIN 5      // 矢印移動Winキーレイヤー
+
+
+// 機能レイヤー
+#define LAYER_NUM 6   // 数字キーレイヤー
+#define LAYER_FUNCTION 7   // ファンクションキーレイヤー
+#define LAYER_SYMBOL 8     // 記号レイヤー
+#define LAYER_MOUSE 9      // マウス操作レイヤー
+#define LAYER_SCROLL 10   // スクロールレイヤー
+#define LAYER_SETTINGS 11  // 設定レイヤー
+
+// 接続先ごとのデフォルトレイヤーを定義
+#if defined(KEYBALL_VARIANT_DONGLE)
+#define BT_PROFILE_0 DEFAULT_LAYER  // 優先プロファイル1: Mac(1)
+#define BT_PROFILE_1 DEFAULT_LAYER  // 優先プロファイル2: Mac(2)
+#define BT_PROFILE_2 DEFAULT_LAYER  // 優先プロファイル3: Mac(3)
+#define BT_PROFILE_3 DEFAULT_LAYER_WIN_DESKTOP  // プロファイル4: Win(1)
+#define BT_PROFILE_4 DEFAULT_LAYER_WIN_DESKTOP  // プロファイル5: Win(2)
+#else
+#define BT_PROFILE_0 DEFAULT_LAYER  // 接続先1: Mac(1)
+#define BT_PROFILE_1 DEFAULT_LAYER  // 接続先2: Mac(2)
+#define BT_PROFILE_2 DEFAULT_LAYER  // 接続先3: Mac(3)
+#define BT_PROFILE_3 DEFAULT_LAYER_WIN_DESKTOP  // 接続先4: Win(1)
+#define BT_PROFILE_4 DEFAULT_LAYER_WIN_DESKTOP  // 接続先5: Win(2)
+#endif
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>    //USB/BT切替設定のため
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
+//USコードをJISに変えるコード
+#include "code.h"
+
+
+// Autoshift Macro（記号利用、通常キーは影響が大きいため）
+#define ASSYM(shifted, keycode) &auto_shift shifted keycode
+
+//#define MOUSE 4
+//#define SCROLL 5
+//#define NUM 6
+
+//AML関連設定
+&zip_temp_layer {
+    excluded-positions = <
+        18 // J
+        20 // L
+        30 // M
+        32 // .
+        34 // LEFT_CONTROL
+        //Macro対応のため不要 22 // LEFT_SHIFT
+        //Macro対応のため不要 33 // RIGHT_SHIFT
+        //Macro対応のため不要 41 // RIGHT_COMMAND
+    >;
+};
+
+//キー入力から一定時間はAMLを発動しない
+&zip_temp_layer {
+    require-prior-idle-ms = <200>;
+};
+//マウスキーを押したらタイムアウトを延長する
+&mkp_input_listener {
+    input-processors = <&zip_temp_layer LAYER_MOUSE 10000>;
+};
+////マウスキーを押すまでマウスレイヤーに留まる(マウスキーを押したらタイムアウトを延長すると同じ実装で、タイムアウト時間が違うだけ)
+//&mkp_input_listener {
+//    input-processors = <&zip_temp_layer LAYER_MOUSE 250>;
+//};
+
+
+&mt {
+    flavor = "balanced";
+    quick-tap-ms = <0>;
+};
+
+/ {
+    combos {
+        compatible = "zmk,combos";
+        combo-term-ms = <30>;  // デフォルトは 50ms
+
+        double_quotation {
+            bindings = <&kp DOUBLE_QUOTES>;
+            key-positions = <20 21>;
+        };
+
+        // Mac系レイヤーから Mac用矢印レイヤーへ（toggle）
+        toggle_arrow_mac {
+            bindings = <&tog LAYER_ARROW_MAC>;
+            key-positions = <18 19>;
+            layers = <
+                DEFAULT_LAYER           // Mac
+                LAYER_ARROW_MAC  
+            >;
+            timeout-ms = <50>;
+        };
+
+        // Windows系レイヤーから Windows用矢印レイヤーへ（toggle）
+        toggle_arrow_win {
+            bindings = <&tog LAYER_ARROW_WIN>;
+            key-positions = <18 19>;
+            layers = <
+                DEFAULT_LAYER_WIN_DESKTOP  // Windows
+                LAYER_ARROW_WIN  
+            >;
+            timeout-ms = <50>;
+        };
+
+        To_LayerSYMBOL {
+            timeout-ms = <50>;
+            bindings = <&togle_symbol>;  // SYMBOLレイヤーに移動して、英数キーを押す
+            //key-positions = <23 24>;
+            key-positions = <11 12>;
+            layers = <
+                DEFAULT_LAYER              // Mac
+                DEFAULT_LAYER_WIN_DESKTOP  // Windows
+                LAYER_SYMBOL
+            >;
+        };
+
+        To_LayerSETTING {
+            bindings = <&mo LAYER_SETTINGS>;  // 設定レイヤーに移動
+            //combo-term-ms = 30;
+            key-positions = <38 37>;
+        };
+        // (v2) Mac: Insertレイヤーからデフォルトへ戻すコンボ（ESCなし）
+        combo_back_to_default_mac {
+            timeout-ms = <800>;
+            key-positions = <37 41>;
+            bindings = <&back_to_default_mac>;
+            layers = <INSERT_MAC_LAYER>;
+        };
+
+        // (v2) Win: Insertレイヤーからデフォルトへ戻すコンボ（ESCなし）
+        combo_back_to_default_win {
+            timeout-ms = <800>;
+            key-positions = <37 41>;
+            bindings = <&back_to_default_win>;
+            layers = <INSERT_WIN_LAYER>;
+        };
+
+
+        //IME切替
+        combo_imeChg {
+            bindings = <&mt LANG1 LANG2>;
+            key-positions = <13 18>;  // F + J
+            timeout-ms = <60>;        // F+J同時押しの判定時間
+            // layers省略 = 全レイヤーで有効
+        };
+
+        chk_keynum1 {
+            bindings = <&none>;
+            key-positions = <0 10>;
+        };
+
+        chk_keynum2 {
+            bindings = <&none>;
+            key-positions = <9 21>;
+        };
+
+        chk_keynum3 {
+            bindings = <&none>;
+            key-positions = <22 34>;
+        };
+
+        chk_keynum4 {
+            bindings = <&none>;
+            key-positions = <41 42>;
+        };
+    };
+
+    macros {
+
+        // BTの全切断 + 全レイヤーリセット + Bluetooth優先設定（最適化版）
+        all_BT_Disc: all_BT_Disc {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <2>;
+            wait-ms = <2>;
+            bindings = <
+                //Bluetooth優先設定
+                &out OUT_BLE
+
+                // Bluetooth切断
+                &bt BT_DISC 4 
+                &bt BT_DISC 3 
+                &bt BT_DISC 2 
+                &bt BT_DISC 1 
+                &bt BT_DISC 0
+
+                // レイヤーをオフ
+                //&tog_off DEFAULT_LAYER 
+                //&tog_off DEFAULT_LAYER_MAC_NOTE 
+                //&tog_off DEFAULT_LAYER_IPAD 
+                //&tog_off DEFAULT_LAYER_WIN_DESKTOP 
+                //&tog_off DEFAULT_LAYER_WIN_COMPANY 
+
+                //Bluetooth優先設定
+                //&out OUT_BLE
+            >;
+            label = "all_BT_Disc";
+        };
+
+        // デフォルトレイヤーOFF
+        reset_DefaultLayer: reset_DefaultLayer {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+
+                // デフォルトレイヤーをオフ（Mac/Win の2系統のみ）
+                &tog_off DEFAULT_LAYER
+                &tog_off DEFAULT_LAYER_WIN_DESKTOP
+
+            >;
+            label = "reset_DefaultLayer";
+        };
+
+        // Mac layer
+        switch_to_mac_layer: switch_to_mac_layer {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+    
+            bindings = <
+                &reset_DefaultLayer
+                &macro_wait_time 200
+
+                // Windows系BTを切断
+                &bt BT_DISC 3
+                &bt BT_DISC 4 
+
+                &tog_on DEFAULT_LAYER
+                &to DEFAULT_LAYER
+                &out OUT_BLE
+            >;
+            label = "SWITCH_TO_MAC_LAYER";
+        };
+
+        // Win layer
+        switch_to_win_layer: switch_to_win_layer {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+    
+            bindings = <
+                &reset_DefaultLayer
+                &macro_wait_time 200
+
+                // Mac系BTを切断
+                &bt BT_DISC 0
+                &bt BT_DISC 1
+                &bt BT_DISC 2
+
+                &tog_on DEFAULT_LAYER_WIN_DESKTOP
+                &to DEFAULT_LAYER_WIN_DESKTOP
+                &out OUT_BLE
+            >;
+            label = "SWITCH_TO_WIN_LAYER";
+        };
+
+                // BT選択 + OSデフォルト切替（Mac: 0/1/2, Win: 3/4）
+        switch_to_mac_bt0: switch_to_mac_bt0 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &bt BT_SEL 0
+                &macro_wait_time 100
+                &switch_to_mac_layer
+            >;
+            label = "SWITCH_TO_MAC_BT0";
+        };
+
+        switch_to_mac_bt1: switch_to_mac_bt1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &bt BT_SEL 1
+                &macro_wait_time 100
+                &switch_to_mac_layer
+            >;
+            label = "SWITCH_TO_MAC_BT1";
+        };
+
+        switch_to_mac_bt2: switch_to_mac_bt2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &bt BT_SEL 2
+                &macro_wait_time 100
+                &switch_to_mac_layer
+            >;
+            label = "SWITCH_TO_MAC_BT2";
+        };
+
+        switch_to_win_bt3: switch_to_win_bt3 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &bt BT_SEL 3
+                &macro_wait_time 100
+                &switch_to_win_layer
+            >;
+            label = "SWITCH_TO_WIN_BT3";
+        };
+
+        switch_to_win_bt4: switch_to_win_bt4 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &bt BT_SEL 4
+                &macro_wait_time 100
+                &switch_to_win_layer
+            >;
+            label = "SWITCH_TO_WIN_BT4";
+        };
+
+to_default_layer: to_default_layer {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to DEFAULT_LAYER &to DEFAULT_LAYER_WIN_DESKTOP>;
+            label = "TO_DEFAULT_LAYER";
+        };
+
+        to_layer_df: to_layer_df {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            bindings = <&to &to_default_layer &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+            label = "TO_LAYER_df";
+        };
+
+        Mac_screenshot: Mac_screenshot {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(LS(N4))>;
+            label = "MAC_SCREENSHOT";
+        };
+
+        Win_screenshot: Win_screenshot {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(LS(S))>;
+            label = "WIN_SCREENSHOT";
+        };
+
+        //AML関連設定
+        exit_AML: exit_AML {
+            compatible = "zmk,behavior-macro";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <0>;
+            bindings = <&tog_off LAYER_MOUSE>;
+            label = "exit_AML";
+        };
+
+        kp_exit_AML: kp_exit_AML {
+            compatible = "zmk,behavior-macro-one-param";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <1>;
+            bindings = <&macro_param_1to1 &kp MACRO_PLACEHOLDER &exit_AML>;
+            label = "KP_exit_AML";
+        };
+
+        // 数字レイヤー移動 + 英数キー
+        togle_num: togle_num {
+            label = "TOGGLE_NUM";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = 
+                <&kp LANG2>,       // 英数キー
+                <&tog LAYER_NUM>;  // 数字レイヤーに移動
+        };
+
+        // 記号レイヤー移動 + 英数キー
+        togle_symbol: togle_symbol {
+            label = "TOGGLE_SYMBOL";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = 
+                <&kp LANG2>,          // 英数キー
+                <&tog LAYER_SYMBOL>;  // 記号レイヤーに移動
+        };
+
+        // (v2) Vim思考: Insertレイヤーからデフォルトへ戻す（ESCなし）
+        back_to_default_mac: back_to_default_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &kp LANG2
+                &to DEFAULT_LAYER
+            >;
+            label = "BACK_TO_DEFAULT_MAC";
+        };
+
+        back_to_default_win: back_to_default_win {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &kp LANG2
+                &to DEFAULT_LAYER_WIN_DESKTOP
+            >;
+            label = "BACK_TO_DEFAULT_WIN";
+        };
+
+        // (v2) 参考: Vimノーマルへ戻す（ESCあり）
+        back_to_normal_mac: back_to_normal_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &kp LANG2
+                &macro_wait_time 50
+                &kp ESCAPE
+                &macro_wait_time 50
+                &to DEFAULT_LAYER
+            >;
+            label = "BACK_TO_NORMAL_MAC";
+        };
+
+        back_to_normal_win: back_to_normal_win {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &kp LANG2
+                &macro_wait_time 50
+                &kp ESCAPE
+                &macro_wait_time 50
+                &to DEFAULT_LAYER_WIN_DESKTOP
+            >;
+            label = "BACK_TO_NORMAL_WIN";
+        };
+
+
+        exit_num_lang2: exit_num_lang2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &to_default_layer
+                &kp LANG2
+            >;
+            label = "EXIT_NUM_LANG2";
+        };
+
+        exit_num_lang1: exit_num_lang1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &to_default_layer
+                &kp LANG1
+            >;
+            label = "EXIT_NUM_LANG1";
+        };
+    };
+
+    behaviors {
+        lt_to_layer_0: lt_to_layer_ {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_TAP_TO_0";
+            bindings = <&mo>, <&to_layer_df>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+        };
+
+        tog_on: toggle_layer_on_only {
+            compatible = "zmk,behavior-toggle-layer";
+            #binding-cells = <1>;
+            display-name = "Toggle Layer On";
+            toggle-mode = "on";
+        };
+
+        tog_off: toggle_layer_off_only {
+            compatible = "zmk,behavior-toggle-layer";
+            #binding-cells = <1>;
+            display-name = "Toggle Layer Off";
+            toggle-mode = "off";
+        };
+
+        ROTATE: ROTATE {
+            compatible = "zmk,behavior-sensor-rotate-var";
+            label = "ROTATE";
+            #sensor-binding-cells = <2>;
+            bindings = <&msc>, <&msc>;
+
+            tap-ms = <20>;
+        };
+
+        scroll_up_down: behavior_sensor_rotate_mouse_wheel_up_down {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+
+            //tap-ms = <20>;
+        };
+
+        scroll_wheel2: scroll_wheel2 {
+        compatible = "zmk,behavior-sensor-rotate";
+        #sensor-binding-cells = <0>;
+        bindings = <&msc SCRL_DOWN &msc SCRL_DOWN>,
+                    <&msc SCRL_UP   &msc SCRL_UP>;
+        };
+
+        scroll_encoder: scroll_encoder {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&scroll_up>, <&scroll_down>;
+        };
+
+        // 上スクロール（小刻みに複数回）
+        scroll_up: scroll_up {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            //bindings = <&msc SCRL_UP>;
+            bindings = <&msc SCRL_UP &msc SCRL_UP>;
+        };
+
+        // 下スクロール（小刻みに複数回）
+        scroll_down: scroll_down {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            //bindings = <&msc SCRL_DOWN>;
+            bindings = <&msc SCRL_DOWN &msc SCRL_DOWN>;
+        };
+
+        //AML
+        mt_exit_AML_on_tap: mt_exit_AML_on_tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "MT_exit_AML_ON_TAP";
+            bindings = <&kp>, <&kp_exit_AML>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "balanced";
+            quick-tap-ms = <200>;
+        };
+
+        //AutoShift
+        auto_shift: auto_shift {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping_term_ms = <180>;
+            quick_tap_ms = <200>;
+            flavor = "tap-preferred";
+            require-prior-idle-ms = <120>;
+            bindings = <&kp>, <&kp>;
+        };
+
+        //移動レイヤートグル
+        lt_arrow_tog: lt_arrow_tog {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_ARROW_TOG";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&tog>, <&kp>;
+        };
+
+        //IME切替
+        chg_ime: chg_ime {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+
+        /*
+        * === エンコーダー機能一覧 ===
+        * 当初５機能があったが、ドングルでは難しいため２つ機能のみ
+        * ■ Mac用（mac_multi_encoder）
+        * ┌─────────────────────────┬──────────────────────┬─────────────────────────────┐
+        * │ 操作                    │ 機能                 │ 実際のショートカット             │
+        * ├─────────────────────────┼──────────────────────┼─────────────────────────────┤
+        * │ エンコーダーのみ           │ スクロール            │ マウスホイール上下             │
+        * │ Shift+エンコーダー        │ 拡大縮小              │ Cmd+テンキー+ / Cmd+テンキー-  │
+        * └─────────────────────────┴──────────────────────┴─────────────────────────────┘
+        * 
+        * ■ Windows用（win_multi_encoder）
+        * ┌─────────────────────────┬──────────────────────┬─────────────────────────────┐
+        * │ 操作                    │ 機能                 │ 実際のショートカット        │
+        * ├─────────────────────────┼──────────────────────┼─────────────────────────────┤
+        * │ エンコーダーのみ        │ スクロール           │ マウスホイール上下          │
+        * │ Shift+エンコーダー        │ 拡大縮小              │ Ctrl+テンキー+ / Ctrl+テンキー-  │
+        * └─────────────────────────┴──────────────────────┴─────────────────────────────┘
+        * 
+        * ■ 機能の優先順位（5層構造　→　2層構造）
+        * 1. 拡大縮小（Shift）
+        * 2. デフォルト：スクロール
+        */
+
+        // ========================================
+        // メインエンコーダー定義
+        // ========================================
+        /*
+        * Mac用メインエンコーダー
+        * Shiftで拡大縮小、Cmdでボリューム、標準でスクロール
+        */
+        mac_multi_encoder: mac_multi_encoder {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&mac_shift_zoom_n>, <&mac_shift_zoom_p>;
+        };
+
+        /*
+        * Windows用メインエンコーダー
+        * Shiftで拡大縮小、標準でスクロール
+        */
+        win_multi_encoder: win_multi_encoder {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&win_shift_zoom_n>, <&win_shift_zoom_p>;
+        };
+
+        // ========================================
+        // 基本機能（拡大縮小/ボリューム）
+        // ========================================
+        /*
+        * Mac用拡大機能（Cmd+テンキー+）
+        * JIS変換で確実に+を送信
+        */
+        zoom_in_wheel:  zoom_in_wheel  {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(KP_PLUS)>;
+        };
+        /*
+        * Mac用縮小機能（Cmd+テンキー-）
+        */
+        zoom_out_wheel: zoom_out_wheel {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(KP_MINUS)>;
+        };
+
+        /*
+        * Win用拡大機能（Ctrl+テンキー+）
+        * JIS変換で確実に+を送信
+        */
+        win_zoom_in_wheel:  win_zoom_in_wheel  {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(KP_PLUS)>;
+        };
+        /*
+        * Win用縮小機能（Ctrl+テンキー-）
+        */
+        win_zoom_out_wheel: win_zoom_out_wheel {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(KP_MINUS)>;
+        };
+
+        // ========================================
+        // Mac用
+        // ========================================
+        //1段階：Shiftが押されていればズーム、なければスクロール
+        mac_shift_zoom_p: mac_shift_zoom_p {
+            compatible="zmk,behavior-mod-morph"; #binding-cells=<0>;
+            // 右回転：Shift 無→スクロールDOWN / 有→ズームOUT
+            bindings = <&scroll_down>, <&zoom_out_wheel>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        
+        mac_shift_zoom_n: mac_shift_zoom_n {
+            compatible="zmk,behavior-mod-morph"; #binding-cells=<0>;
+            // 左回転：Shift 無→スクロールUP / 有→ズームIN
+            bindings = <&scroll_up>, <&zoom_in_wheel>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // ========================================
+        // Win用
+        // ========================================
+        win_shift_zoom_p: win_shift_zoom_p {
+            compatible="zmk,behavior-mod-morph"; #binding-cells=<0>;
+            // 右回転：Shift 無→スクロールUP / 有→ズームOUT
+            bindings = <&scroll_down>, <&win_zoom_out_wheel>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        
+        win_shift_zoom_n: wih_shift_zoom_n {
+            compatible="zmk,behavior-mod-morph"; #binding-cells=<0>;
+            // 左回転：Shift 無→スクロールDOWN / 有→ズームIN
+            bindings = <&scroll_up>, <&win_zoom_in_wheel>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // Mac用100%リセット
+        mac_zoom_reset: mac_zoom_reset {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(N0)>;  // Cmd+0
+        };
+
+        // Windows用100%リセット
+        win_zoom_reset: win_zoom_reset {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(N0)>;  // Ctrl+0
+        };
+
+        //矢印レイヤーに移動がたまに失敗するため
+        lt_arrow: lt_arrow {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_TAP_ARROW";
+            #binding-cells = <2>;
+            tapping-term-ms = <250>;
+            quick-tap-ms = <200>;
+            flavor = "hold-preferred";
+            bindings = <&mo>, <&kp>;
+        };
+
+        lt_layer_tap_preferred: lt_layer_tap_preferred {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_TAP_TAP_PREF";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            bindings = <&mo>, <&kp>;
+        };
+
+        /* 注意:
+        *  - bindings の tap 側を &kp から &td_* に差し替えるため、
+        *    keymap から渡す引数は「レイヤー」だけになる
+        *  - そのため #binding-cells は <1> にする
+        */
+        // Arrow用: hold=押している間レイヤー / tap=（1回LANG2,2回ESC）
+        lt_arrow_td: lt_arrow_td {
+            compatible = "zmk,behavior-hold-tap";           // #hold-tap
+            label = "LAYER_TAP_ARROW_TD";                   // #識別ラベル
+            #binding-cells = <2>;                           // #引数はレイヤー1つだけ
+            tapping-term-ms = <250>;                        // #元の lt_arrow と同じ
+            quick-tap-ms = <200>;                           // #元の lt_arrow と同じ
+            flavor = "hold-preferred";                      // #元の lt_arrow と同じ
+            bindings = <&mo>, <&td_lang2_esc>;              // #hold=&mo, #tap=&td_lang2_esc
+        };
+
+        // Function用: hold=押している間レイヤー / tap=（1回LANG1,2回JP_AT）
+        lt_layer_tap_preferred_td: lt_layer_tap_preferred_td {
+            compatible = "zmk,behavior-hold-tap";           // #hold-tap
+            label = "LAYER_TAP_TAP_PREF_TD";                // #識別ラベル
+            #binding-cells = <2>;                           // #引数はレイヤー1つだけ
+            tapping-term-ms = <200>;                        // #元の lt_layer_tap_preferred と同じ
+            flavor = "tap-preferred";                       // #元の lt_layer_tap_preferred と同じ
+            bindings = <&mo>, <&td_lang1_at>;               // #hold=&mo, #tap=&td_lang1_at
+        };
+
+        td_lang_paste: td_lang_paste {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TD_LANG_PASTE";
+            #binding-cells = <0>;
+            tapping-term-ms = <350>;
+            bindings = <&kp LANG2>, <&kp LANG1>, <&kp LA(LG(V))>;
+        };
+
+        // Altを2回送るマクロ
+        win_clip_altalt: win_clip_altalt {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &kp LALT            // 1回目
+                &macro_wait_time 80 // 適宜調整
+                &kp LALT            // 2回目
+            >;
+        };
+
+        // tap dance の3タップ目に差し込む
+        td_lang_paste_win: td_lang_paste_win {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            label = "TD_LANG_PASTE_WIN";
+            tapping-term-ms = <350>;
+            bindings = <
+                &kp LANG2
+                &kp LANG1
+                &win_clip_altalt
+            >;
+        };
+
+        // 1回: LANG2 / 2回: ESCAPE（holdは lt_arrow 側で LAYER_ARROW_MAC のまま）
+        td_lang2_esc: td_lang2_esc {
+            compatible = "zmk,behavior-tap-dance";          // tap-dance behavior
+            label = "TD_LANG2_ESC";                         // 任意ラベル（識別用）
+            #binding-cells = <0>;                           // 引数なしで参照する
+            tapping-term-ms = <350>;                        // 2回目受付時間（必要なら調整）
+            bindings = <&kp LANG2>, <&kp ESCAPE>;           // 1回目 / 2回目
+        };
+
+//        // (v2) デフォルトレイヤ用：iキー 1tap=i / 2tap=Insertレイヤへ（iは送らない）
+//        td_i_insert_mac: td_i_insert_mac {
+//            compatible = "zmk,behavior-tap-dance";
+//            #binding-cells = <0>;
+//            tapping-term-ms = <230>;
+//            bindings = <&kp I>, <&to INSERT_MAC_LAYER>;
+//        };
+//
+//        td_i_insert_win: td_i_insert_win {
+//            compatible = "zmk,behavior-tap-dance";
+//            #binding-cells = <0>;
+//            tapping-term-ms = <180>;
+//            bindings = <&kp I>, <&to INSERT_WIN_LAYER>;
+//        };
+//
+        /* --- Mac 用：日本語化して Insert へ --- */
+        enter_insert_jp_mac: enter_insert_jp_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &kp LANG1                 // 日本語入力へ
+                &macro_wait_time 100      // 取りこぼし軽減（既存運用に合わせて調整可）
+                &to INSERT_MAC_LAYER      // Insert(Mac) レイヤへ
+            >;
+        };
+        
+        td_i_insert_mac: td_i_insert_mac {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <230>;      // 既存値維持
+            bindings = <&kp I>, <&enter_insert_jp_mac>;
+        };
+        
+        
+        /* --- Windows 用：日本語化して Insert へ --- */
+        enter_insert_jp_win: enter_insert_jp_win {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <
+                &kp LANG1                 // 日本語入力へ
+                &macro_wait_time 100      // 取りこぼし軽減（既存運用に合わせて調整可） 
+                &to INSERT_WIN_LAYER      // Insert(Win) レイヤへ
+            >;
+        };
+        
+        td_i_insert_win: td_i_insert_win {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <230>;
+            bindings = <&kp I>, <&enter_insert_jp_win>;
+        };
+
+
+        // 1回: LANG1 / 2回: JP_AT（holdは lt_layer_tap_preferred 側で LAYER_FUNCTION のまま）
+        td_lang1_at: td_lang1_at {
+            compatible = "zmk,behavior-tap-dance";          // tap-dance behavior
+            label = "TD_LANG1_AT";                          // 任意ラベル（識別用）
+            #binding-cells = <0>;                           // 引数なしで参照する
+            tapping-term-ms = <350>;                        // 2回目受付時間（必要なら調整）
+            bindings = <&kp LANG1>, <&kp JP_AT>;            // 1回目 / 2回目（JP_ATはあなたのJIS用コード前提）
+        };
+
+        mm_num0_tilde: mm_num0_tilde {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            mods = <(MOD_LSFT | MOD_RSFT)>;
+            bindings = <&kp JP_0 &kp JP_CIRC>;
+        };
+
+        mm_BS_DEL: mm_BS_DEL {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            mods = <(MOD_LSFT | MOD_RSFT)>;
+            bindings = <&kp BACKSPACE &kp DELETE>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        //Mac用レイヤー
+        DEFAULT_LAYER {
+            bindings = <
+// |  Q  |  W  |  E  |  R  |  T  |                        |  Y  |  U  |  I  |  O  |  P  | 
+// |  A  |  S  |  D  |  F  |  G  | 右クリック  |            |  パイプ/ ¥(現在不可)  |  H  |  J (LAYER_FUNCTION)  |  K  |  - (LAYER_SCROLL)  |
+// |  Z (左シフト)  |  X  |  C  |  V  |  B  |  左クリック  |               |  チルダ/  
+// |
+
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &td_i_insert_mac          &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mac_zoom_reset                          ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_ARROW_MAC JP_SCLN
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &td_lang_paste                  &kp RIGHT_ALT          &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &mt RIGHT_SHIFT JP_COLN
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &lt_arrow LAYER_ARROW_MAC ESCAPE     &lt_layer_tap_preferred LAYER_NUM SPACE   &lt_layer_tap_preferred LAYER_FUNCTION JP_AT    &mt LEFT_GUI BACKSPACE &lt_arrow LAYER_ARROW_MAC ENTER    &kp RCTRL 
+            >;
+
+            //sensor-bindings = <&scroll_encoder>;
+            sensor-bindings = <&mac_multi_encoder>;
+        };
+        INSERT_MAC_LAYER {
+            bindings = <
+// |  Q  |  W  |  E  |  R  |  T  |                        |  Y  |  U  |  I  |  O  |  P  | 
+// |  A  |  S  |  D  |  F  |  G  | 右クリック  |            |  パイプ/ ¥(現在不可)  |  H  |  J (LAYER_FUNCTION)  |  K  |  - (LAYER_SCROLL)  |
+// |  Z (左シフト)  |  X  |  C  |  V  |  B  |  左クリック  |               |  チルダ/  
+// |
+
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &td_i_insert_mac      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F                  &kp G                &mac_zoom_reset                          ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_SCROLL JP_SCLN
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                  &kp B                &td_lang_paste                  &kp RIGHT_ALT          &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &mt RIGHT_SHIFT JP_COLN
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &back_to_normal_mac          &lt_layer_tap_preferred LAYER_NUM SPACE   &lt_layer_tap_preferred_td LAYER_FUNCTION &td_lang1_at    &mt LEFT_GUI BACKSPACE &lt_arrow LAYER_ARROW_MAC ENTER    &kp RCTRL
+            >;
+
+            //sensor-bindings = <&scroll_encoder>;
+            sensor-bindings = <&mac_multi_encoder>;
+        };
+        LAYER_ARROW_MAC {
+            bindings = <
+&kp ESCAPE        &none                  &kp LC(UP_ARROW)        &none          &none                             &kp LG(UP_ARROW)       &kp HOME          &none         &kp END           &kp LG(DOWN_ARROW)
+&kp TAB           &kp LA(LG(UP_ARROW))   &kp LC(LEFT_ARROW)      &kp LC(RIGHT_ARROW)      &none  &none            &none       &kp LEFT    &kp DOWN_ARROW    &kp UP_ARROW  &kp RIGHT_ARROW   &kp LG(JP_LBKT)
+&kp LEFT_SHIFT    &kp LA(LG(DOWN_ARROW)) &kp LA(LG(LEFT_ARROW))  &kp LA(LG(RIGHT_ARROW))  &none  &kp TAB          &none       &none      &kp DELETE         &none         &none             &kp LG(JP_RBKT)
+&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_GUI  &kp LG(Z)          &kp LG(LS(Z))           &kp LEFT_GUI                        &kp BACKSPACE      &kp TAB                           &Mac_screenshot
+            >;
+        };
+
+
+        //Windows用レイヤー
+        DEFAULT_LAYER_WIN_DESKTOP {
+            bindings = <
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &td_i_insert_win                        &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F  &kp G                &win_zoom_reset                          ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_ARROW_WIN JP_SCLN
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V  &kp B                &td_lang_paste_win                             &kp RIGHT_ALT         &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &mt RIGHT_SHIFT JP_COLN
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI         &lt_arrow LAYER_ARROW_WIN ESCAPE     &lt_layer_tap_preferred LAYER_NUM SPACE  &lt_layer_tap_preferred LAYER_FUNCTION JP_AT     &mt RCTRL BACKSPACE   &lt_arrow LAYER_ARROW_WIN ENTER      &kp RCTRL
+
+            >;
+
+            sensor-bindings = <&win_multi_encoder>;
+        };
+        INSERT_WIN_LAYER {
+            bindings = <
+&kp Q      &kp W         &kp E         &kp R                  &kp T                                                                     &kp Y                  &kp U                 &td_i_insert_win      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F  &kp G                &win_zoom_reset                          ASSYM(S_PIPE, JP_YEN_MAC)     &kp H                  &kp J  &kp K      &kp L    &lt LAYER_SCROLL JP_SCLN
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V  &kp B                &td_lang_paste_win                             &kp RIGHT_ALT         &kp N                  &kp M                ASSYM(S_LESS_THAN,JP_COMMA)  ASSYM(S_GREATER_THAN,JP_DOT)  &mt RIGHT_SHIFT JP_COLN
+&kp LCTRL         &kp LEFT_ALT  &kp LEFT_GUI  &back_to_normal_win         &lt_layer_tap_preferred LAYER_NUM SPACE  &lt_layer_tap_preferred_td LAYER_FUNCTION &td_lang1_at     &mt RCTRL BACKSPACE   &lt_arrow LAYER_ARROW_WIN ENTER      &kp RCTRL
+
+            >;
+
+            sensor-bindings = <&win_multi_encoder>;
+        };
+
+        LAYER_ARROW_WIN {
+            bindings = <
+&kp ESCAPE        &none         &kp LG(TAB)                &none               &none                            &kp LC(HOME)       &kp HOME        &none         &kp END          &kp LC(END)
+&kp TAB           &none         &kp LC(LG(LEFT))           &kp LC(LG(RIGHT))   &kp F12         &none            &none      &kp LEFT    &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT_ARROW  &kp LA(LEFT)
+&kp LEFT_SHIFT    &none         &kp LS(LC(TAB))            &kp LC(TAB)         &kp LC(MINUS)   &kp TAB          &none      &none       &kp DELETE         &none         &none            &kp LA(RIGHT)
+&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_GUI               &kp LC(Z)           &kp LC(Y)       &kp LEFT_ALT     &kp BACKSPACE      &kp TAB                            &Win_screenshot
+            >;
+        };
+
+        LAYER_NUM {
+            bindings = <
+&kp S_EXCL  &kp S_DQUO  &kp HASH     &kp S_DLR    &kp S_PERC                     &kp S_AMPR       &kp S_QUOT     &kp S_LPRN   &kp S_RPRN       &kp JP_MINS
+&kp JP_1    &kp JP_2    &kp JP_3     &kp JP_4     &kp JP_5     &none      &none  &kp JP_6         &kp JP_7       &kp JP_8     &kp JP_9         &mm_num0_tilde
+&trans       &none       &none        &none        &none        &none      &none  &kp JP_EQL       &kp S_ASTR     &kp S_PLUS   ASSYM(S_QUESTION, JP_SLASH)     &kp S_UNDS
+&trans     &trans      &trans        &kp ENTER            &none     &none            &mm_BS_DEL      &kp ENTER        &kp RCTRL
+            >;
+        };
+
+        LAYER_FUNCTION {
+            bindings = <
+&kp F1                  &kp F2  &kp F3     &kp F4 &kp F5                                         &kp F6  &kp F7                  &kp F8                  &kp F9                  &kp F10
+&none                   &none   &none      &none  &kp C_VOL_UP    &none         &none   &kp LC(S_PLUS)  ASSYM(S_LCBR, JP_LBKT)  ASSYM(S_RCBR, JP_RBKT)  ASSYM(S_PLUS, JP_SEMI)  &kp F11
+&kp LEFT_SHIFT          &none   &none      &none  &kp C_VOL_DN    &kp C_MUTE    &none   &kp LC(JP_MINS) &none  &none  ASSYM(S_ASTR, JP_COLN)  &kp F12
+&kp LEFT_CONTROL        &trans  &trans     &none  &none           &none                               &kp RCTRL  &none                                                        ASSYM(S_TILDE, JP_CIRC)
+            >;
+        };
+
+        LAYER_SYMBOL {
+            bindings = <
+&none  &none  &none  &none  &none                                          &none       &none   ASSYM(S_EQL, JP_MINS)    ASSYM(S_TILDE, JP_CIRC)   ASSYM(S_PIPE, JP_YEN_MAC)
+&none  &none  &none  &none  &none  &none                        &none      &none       &none   &none                    ASSYM(S_BQ, JP_AT)        ASSYM(S_LCBR, JP_LBKT)
+&kp LEFT_SHIFT  &none  &none  &none  &none  &kp LANG2           &kp LANG1      &none       &none   ASSYM(S_PLUS, JP_SEMI)   ASSYM(S_ASTR, JP_COLN)    ASSYM(S_RCBR, JP_RBKT)
+&kp LEFT_CONTROL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none       &kp RCTRL   &none                          &none
+            >;
+        };
+
+        LAYER_MOUSE {
+            bindings = <
+&none     &none      &none      &none      &none                           &none     &none      &none      &none      &none
+&none  &none  &none  &none  &none  &none      &none                        &mkp MB4  &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp MB5
+&kp LEFT_SHIFT     &none      &none      &none      &none     &none        &none  &none     &mkp LCLK  &none      &mkp RCLK  &none
+&kp LCTRL     &kp LEFT_ALT  &kp LEFT_GUI  &exit_AML  &none  &none          &none  &none                          &none
+            >;
+        };
+
+        LAYER_SCROLL {
+            bindings = <
+&none  &none  &none  &none  &none                    &none  &none  &none  &none  &none
+&none  &none  &none  &none  &none  &none      &none  &none  &none  &none  &none  &none
+&kp LEFT_SHIFT  &none  &none  &none  &none  &none      &none  &none  &mkp LCLK       &none         &mkp RCLK  &none
+&kp LCTRL     &kp LEFT_ALT  &kp LEFT_GUI  &none  &none  &none      &mt RCTRL TAB  &kp RIGHT_COMMAND                          &none
+            >;
+        };
+
+        LAYER_SETTINGS {
+            bindings = <
+&trans  &trans        &trans        &trans        &trans                            &switch_to_mac_bt0  &switch_to_mac_bt1  &switch_to_mac_bt2       &switch_to_win_bt3      &switch_to_win_bt4
+&trans  &trans        &trans        &trans        &bootloader  &trans      &bootloader   &kp CAPS                &switch_to_mac_layer &trans                &switch_to_win_layer    &all_BT_Disc
+&trans  &trans        &trans        &trans        &sys_reset   &trans      &sys_reset    &kp KP_NUMLOCK          &kp INS              &trans                &trans                  &bt BT_CLR
+&trans  &trans        &trans        &trans        &trans       &trans      &out OUT_USB  &out OUT_BLE                                                                          &bt BT_CLR_ALL
+            >;
+        };
+    };
+};

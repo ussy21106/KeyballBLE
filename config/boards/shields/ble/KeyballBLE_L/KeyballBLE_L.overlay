@@ -1,4 +1,4 @@
-#include "KeyballBLE.dtsi"
+#include "../../common/KeyballBLE.dtsi"
 
 &default_transform {
     col-offset = <0>;  // 左側はオフセット0

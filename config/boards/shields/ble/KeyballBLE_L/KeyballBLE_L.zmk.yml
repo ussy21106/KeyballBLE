@@ -1,0 +1,8 @@
+file_format: "1"
+id: KeyballBLE_L
+name: KeyballBLE Left
+type: shield
+url: https://github.com/Dist16384/KeyballBLE.git
+requires: [seeeduino_xiao_ble]
+features:
+  - keys

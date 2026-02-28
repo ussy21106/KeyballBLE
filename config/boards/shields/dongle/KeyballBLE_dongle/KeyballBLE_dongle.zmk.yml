@@ -1,0 +1,8 @@
+file_format: "1"
+id: KeyballBLE_dongle
+name: KeyballBLE Dongle
+type: shield
+url: https://github.com/Dist16384/KeyballBLE.git
+requires: [nrf52840_mdk_usb_dongle]
+features:
+  - pointing

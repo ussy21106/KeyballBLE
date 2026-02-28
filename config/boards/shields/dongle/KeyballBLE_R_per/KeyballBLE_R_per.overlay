@@ -1,7 +1,7 @@
 // KeyballBLE_R_per.overlay - 右側Peripheral用（PMW3610対応）
 
 #include <zephyr/dt-bindings/input/input-event-codes.h>
-#include "KeyballBLE.dtsi"
+#include "../../common/KeyballBLE.dtsi"
 
 &default_transform {
     col-offset = <6>;

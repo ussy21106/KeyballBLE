@@ -26,3 +26,8 @@ config/boards/shields/code.h
 #確認用
 config/encoder_behaviors.h
 
+config_backup_*/
+*.keymap_2026*
+*_tmp.keymap
+*.common_*
+

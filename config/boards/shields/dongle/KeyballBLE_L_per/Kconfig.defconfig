@@ -1,0 +1,9 @@
+if SHIELD_KEYBALLBLE_L_PER
+
+config ZMK_KEYBOARD_NAME
+    default "KeyballBLE_L_Per"
+
+config ZMK_SPLIT
+    default y
+
+endif

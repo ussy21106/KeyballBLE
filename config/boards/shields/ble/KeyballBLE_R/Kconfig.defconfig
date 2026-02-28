@@ -1,0 +1,12 @@
+if SHIELD_KEYBALLBLE_R
+
+config ZMK_KEYBOARD_NAME
+    default "KeyballBLE_R"
+
+config ZMK_SPLIT
+    default y
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif

@@ -1,4 +1,4 @@
-#include "KeyballBLE.dtsi"
+#include "../../common/KeyballBLE.dtsi"
 
 &default_transform {
     col-offset = <6>;
@@ -17,9 +17,10 @@
 / {
     trackball_listener {
         compatible = "zmk,input-listener";
+        
+        status = "okay";
         device = <&trackball>;
-
-        input-processors = <&zip_temp_layer 13 100000>;
+        input-processors = <&zip_temp_layer 9 100000>;
     };
 };
 
@@ -67,6 +68,6 @@
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 //AML対応でコメント        automouse-layer = <9>;
-        scroll-layers = <14>;
+        scroll-layers = <10>;
     };
 };
