@@ -21,6 +21,12 @@
         status = "okay";
         device = <&trackball>;
         input-processors = <&zip_temp_layer 9 100000>;
+
+        scroll_override {                                        /* # レイヤー中だけスクロール化（対応しているfork/版のみ有効） */
+            layers = <2 5>;                                      /* # スクロール化したいレイヤー番号 */
+            input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 12>;       /* # XY移動→スクロールに変換 */
+            process-next;                                        /* # B：この後もベース（zip_temp_layer）を続けて適用 */
+        };                                                       /* # override終わり */
     };
 };
 

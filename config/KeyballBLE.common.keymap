@@ -157,7 +157,7 @@
             timeout-ms = <800>;
             key-positions = <37 41>;
             bindings = <&back_to_default_mac>;
-            layers = <INSERT_MAC_LAYER>;
+            layers = <INSERT_MAC_LAYER>, <DEFAULT_LAYER>;
         };
 
         // (v2) Win: Insertレイヤーからデフォルトへ戻すコンボ（ESCなし）
@@ -165,7 +165,7 @@
             timeout-ms = <800>;
             key-positions = <37 41>;
             bindings = <&back_to_default_win>;
-            layers = <INSERT_WIN_LAYER>;
+            layers = <INSERT_WIN_LAYER>, <DEFAULT_LAYER_WIN_DESKTOP>;
         };
 
 
@@ -414,6 +414,9 @@ to_default_layer: to_default_layer {
             #binding-cells = <0>;
             bindings = <
                 &kp LANG2
+                &macro_wait_time 100
+                &kp LANG2
+                &macro_wait_time 100
                 &to DEFAULT_LAYER
             >;
             label = "BACK_TO_DEFAULT_MAC";
@@ -424,6 +427,9 @@ to_default_layer: to_default_layer {
             #binding-cells = <0>;
             bindings = <
                 &kp LANG2
+                &macro_wait_time 100
+                &kp LANG2
+                &macro_wait_time 100
                 &to DEFAULT_LAYER_WIN_DESKTOP
             >;
             label = "BACK_TO_DEFAULT_WIN";
@@ -974,8 +980,8 @@ to_default_layer: to_default_layer {
             bindings = <
 &kp S_EXCL  &kp S_DQUO  &kp HASH     &kp S_DLR    &kp S_PERC                     &kp S_AMPR       &kp S_QUOT     &kp S_LPRN   &kp S_RPRN       &kp JP_MINS
 &kp JP_1    &kp JP_2    &kp JP_3     &kp JP_4     &kp JP_5     &none      &none  &kp JP_6         &kp JP_7       &kp JP_8     &kp JP_9         &mm_num0_tilde
-&trans       &none       &none        &none        &none        &none      &none  &kp JP_EQL       &kp S_ASTR     &kp S_PLUS   ASSYM(S_QUESTION, JP_SLASH)     &kp S_UNDS
-&trans     &trans      &trans        &kp ENTER            &none     &none            &mm_BS_DEL      &kp ENTER        &kp RCTRL
+&trans      &none       &none        &none        &none        &none      &none  &kp JP_EQL       &kp S_ASTR     &kp S_PLUS   ASSYM(S_QUESTION, JP_SLASH)     &kp S_UNDS
+&trans      &trans      &trans       &trans       &none        &none            &kp TAB      &kp ENTER        &kp RCTRL
             >;
         };
 
