@@ -75,8 +75,8 @@
     excluded-positions = <
         18 // J
         20 // L
-        30 // M
-        32 // .
+        //30 // M
+        //32 // .
         34 // LEFT_CONTROL
         //Macro対応のため不要 22 // LEFT_SHIFT
         //Macro対応のため不要 33 // RIGHT_SHIFT
@@ -369,25 +369,6 @@ to_default_layer: to_default_layer {
             label = "WIN_SCREENSHOT";
         };
 
-        //AML関連設定
-        exit_AML: exit_AML {
-            compatible = "zmk,behavior-macro";
-            wait-ms = <0>;
-            tap-ms = <0>;
-            #binding-cells = <0>;
-            bindings = <&tog_off LAYER_MOUSE>;
-            label = "exit_AML";
-        };
-
-        kp_exit_AML: kp_exit_AML {
-            compatible = "zmk,behavior-macro-one-param";
-            wait-ms = <0>;
-            tap-ms = <0>;
-            #binding-cells = <1>;
-            bindings = <&macro_param_1to1 &kp MACRO_PLACEHOLDER &exit_AML>;
-            label = "KP_exit_AML";
-        };
-
         // 数字レイヤー移動 + 英数キー
         togle_num: togle_num {
             label = "TOGGLE_NUM";
@@ -552,18 +533,6 @@ to_default_layer: to_default_layer {
             #binding-cells = <0>;
             //bindings = <&msc SCRL_DOWN>;
             bindings = <&msc SCRL_DOWN &msc SCRL_DOWN>;
-        };
-
-        //AML
-        mt_exit_AML_on_tap: mt_exit_AML_on_tap {
-            compatible = "zmk,behavior-hold-tap";
-            label = "MT_exit_AML_ON_TAP";
-            bindings = <&kp>, <&kp_exit_AML>;
-
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            flavor = "balanced";
-            quick-tap-ms = <200>;
         };
 
         //AutoShift
@@ -980,17 +949,17 @@ to_default_layer: to_default_layer {
             bindings = <
 &kp S_EXCL  &kp S_DQUO  &kp HASH     &kp S_DLR    &kp S_PERC                     &kp S_AMPR       &kp S_QUOT     &kp S_LPRN   &kp S_RPRN       &kp JP_MINS
 &kp JP_1    &kp JP_2    &kp JP_3     &kp JP_4     &kp JP_5     &none      &none  &kp JP_6         &kp JP_7       &kp JP_8     &kp JP_9         &mm_num0_tilde
-&trans      &none       &none        &none        &none        &none      &none  &kp JP_EQL       &kp S_ASTR     &kp S_PLUS   ASSYM(S_QUESTION, JP_SLASH)     &kp S_UNDS
-&trans      &trans      &trans       &trans       &none        &none            &kp TAB      &kp ENTER        &kp RCTRL
+&trans      &none       &none        &none        &none        &none      &none  &kp JP_EQL       &kp S_ASTR     &kp S_PLUS   &kp JP_SLASH     &kp S_UNDS
+&trans      &trans      &trans       &trans       &none        &none             &kp TAB          &kp ENTER      &kp S_QUESTION
             >;
         };
 
         LAYER_FUNCTION {
             bindings = <
-&kp F1                  &kp F2  &kp F3     &kp F4 &kp F5                                         &kp F6  &kp F7                  &kp F8                  &kp F9                  &kp F10
-&none                   &none   &none      &none  &kp C_VOL_UP    &none         &none   &kp LC(S_PLUS)  ASSYM(S_LCBR, JP_LBKT)  ASSYM(S_RCBR, JP_RBKT)  ASSYM(S_PLUS, JP_SEMI)  &kp F11
-&kp LEFT_SHIFT          &none   &none      &none  &kp C_VOL_DN    &kp C_MUTE    &none   &kp LC(JP_MINS) &none  &none  ASSYM(S_ASTR, JP_COLN)  &kp F12
-&kp LEFT_CONTROL        &trans  &trans     &none  &none           &none                               &kp RCTRL  &none                                                        ASSYM(S_TILDE, JP_CIRC)
+&kp F1                  &kp F2  &kp F3     &kp F4 &kp F5                                &kp F6          &kp F7                  &kp F8                  &kp F9     &kp F10
+&none                   &none   &none      &none  &none           &none         &none   &kp LC(S_PLUS)  ASSYM(S_LCBR, JP_LBKT)  ASSYM(S_RCBR, JP_RBKT)  &none      &kp F11
+&kp LEFT_SHIFT          &none   &none      &none  &none           &none         &none   &kp LC(JP_MINS) &kp S_BQ                &kp S_TILDE             &none      &kp F12
+&kp LEFT_CONTROL        &trans  &trans     &none  &none           &none                 &kp RCTRL       &none                                                      ASSYM(S_TILDE, JP_CIRC)
             >;
         };
 
@@ -1005,10 +974,10 @@ to_default_layer: to_default_layer {
 
         LAYER_MOUSE {
             bindings = <
-&none     &none      &none      &none      &none                           &none     &none      &none      &none      &none
-&none  &none  &none  &none  &none  &none      &none                        &mkp MB4  &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp MB5
-&kp LEFT_SHIFT     &none      &none      &none      &none     &none        &none  &none     &mkp LCLK  &none      &mkp RCLK  &none
-&kp LCTRL     &kp LEFT_ALT  &kp LEFT_GUI  &exit_AML  &none  &none          &none  &none                          &none
+&none              &none         &none         &none   &none                      &none     &none      &none      &none      &none
+&none              &none         &none         &none   &none  &none        &none  &none     &mkp LCLK  &mkp MCLK  &mkp RCLK  &none
+&kp LEFT_SHIFT     &none         &none         &none   &none  &none        &none  &none     &none      &none      &none      &none
+&kp LCTRL          &kp LEFT_ALT  &kp LEFT_GUI  &trans  &none  &none        &none  &none                           &none
             >;
         };
 
@@ -1023,10 +992,10 @@ to_default_layer: to_default_layer {
 
         LAYER_SETTINGS {
             bindings = <
-&trans  &trans        &trans        &trans        &trans                            &switch_to_mac_bt0  &switch_to_mac_bt1  &switch_to_mac_bt2       &switch_to_win_bt3      &switch_to_win_bt4
-&trans  &trans        &trans        &trans        &bootloader  &trans      &bootloader   &kp CAPS                &switch_to_mac_layer &trans                &switch_to_win_layer    &all_BT_Disc
-&trans  &trans        &trans        &trans        &sys_reset   &trans      &sys_reset    &kp KP_NUMLOCK          &kp INS              &trans                &trans                  &bt BT_CLR
-&trans  &trans        &trans        &trans        &trans       &trans      &out OUT_USB  &out OUT_BLE                                                                          &bt BT_CLR_ALL
+&trans  &trans        &trans        &trans        &kp C_MUTE                            &switch_to_mac_bt0  &switch_to_mac_bt1  &switch_to_mac_bt2       &switch_to_win_bt3           &switch_to_win_bt4
+&trans  &trans        &trans        &trans        &kp C_VOL_UP   &trans          &trans   &kp CAPS                &switch_to_mac_layer &trans                &switch_to_win_layer    &all_BT_Disc
+&trans  &trans        &trans        &trans        &kp C_VOL_DN   &bootloader     &sys_reset    &kp KP_NUMLOCK          &kp INS              &trans                &bootloader         &bt BT_CLR
+&trans  &trans        &trans        &trans        &trans         &trans      &out OUT_USB  &out OUT_BLE                                                                               &bt BT_CLR_ALL
             >;
         };
     };
