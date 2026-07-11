@@ -74,6 +74,7 @@
 &zip_temp_layer {
     excluded-positions = <
         18 // J
+        19 // K
         20 // L
         //30 // M
         //32 // .
@@ -358,7 +359,7 @@ to_default_layer: to_default_layer {
         Mac_screenshot: Mac_screenshot {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LG(LS(N4))>;
+            bindings = <&kp LG(LS(N5))>;
             label = "MAC_SCREENSHOT";
         };
 
